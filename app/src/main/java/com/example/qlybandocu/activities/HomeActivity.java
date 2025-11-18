@@ -44,6 +44,11 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener 
         binding.rcCategory.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         binding.rcCategory.setLayoutManager(layoutManager);
+        // Mở trang quản lý tài khoản khi click avatar
+        binding.imgProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, AccountActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void initData() {
