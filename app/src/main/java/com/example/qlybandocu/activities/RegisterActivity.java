@@ -26,20 +26,26 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnRegister;
     TextView txtToLogin;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
+        // Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        // Ánh xạ view
         edtName = findViewById(R.id.edtName);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         btnRegister = findViewById(R.id.btnRegister);
         txtToLogin = findViewById(R.id.txtToLogin);
 
-        txtToLogin.setOnClickListener(v -> {
-            finish(); // Quay lại login
-        });
+        // Quay lại Login
+        txtToLogin.setOnClickListener(v -> finish());
 
         btnRegister.setOnClickListener(v -> {
             String name = edtName.getText().toString().trim();
@@ -51,40 +57,39 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            // Gọi API đăng ký (tạo sau)
             registerUser(name, email, pass);
         });
     }
 
     private void registerUser(String name, String email, String password) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-
-                        // Lưu thêm tên vào Firestore nếu muốn
-                        // (không bắt buộc)
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
                             String uid = user.getUid();
 
-                            // Lưu tên vào Firestore
+                            // Lưu tên và email vào Firestore
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             Map<String, Object> userMap = new HashMap<>();
                             userMap.put("name", name);
                             userMap.put("email", email);
-
                             db.collection("users").document(uid).set(userMap);
+
+                            // Gửi email xác thực
+                            user.sendEmailVerification()
+                                    .addOnCompleteListener(verifyTask -> {
+                                        if (verifyTask.isSuccessful()) {
+                                            Toast.makeText(this, "Đăng ký thành công! Vui lòng kiểm tra email để xác thực.", Toast.LENGTH_LONG).show();
+                                            finish(); // Quay về Login
+                                        } else {
+                                            Toast.makeText(this, "Lỗi gửi email xác thực: " + verifyTask.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
                         }
-
-                        Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-
-                        // Quay về LoginActivity
-                        finish();
-
                     } else {
                         Toast.makeText(this, "Đăng ký thất bại: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-    }}
+    }
+}
