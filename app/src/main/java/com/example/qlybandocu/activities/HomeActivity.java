@@ -19,6 +19,7 @@ import com.example.qlybandocu.adapters.CategoryAdapter;
 import com.example.qlybandocu.databinding.ActivityHomeBinding;
 import com.example.qlybandocu.listener.CategoryListener;
 import com.example.qlybandocu.models.Category;
+import com.example.qlybandocu.models.Products;
 import com.example.qlybandocu.viewModel.HomeViewModel;
 
 public class HomeActivity extends AppCompatActivity implements CategoryListener {
@@ -65,6 +66,12 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener 
                 binding.rcCategory.setAdapter(adapter);
             } else {
                 Log.e("API_ERROR", "API success=false: " + categoryModel.getMessage());
+            }
+        });
+        homeViewModel.productModelMutableLiveData(1).observe(this,productModel -> {
+            for (Products product: productModel.getResult()){
+                Log.d("logg", product.getStrProduct());
+
             }
         });
     }
