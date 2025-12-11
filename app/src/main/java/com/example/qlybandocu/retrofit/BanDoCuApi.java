@@ -1,6 +1,7 @@
 package com.example.qlybandocu.retrofit;
 
 import com.example.qlybandocu.models.CategoryModel;
+import com.example.qlybandocu.models.ProductModel;
 import com.example.qlybandocu.models.UserModel;
 
 import retrofit2.Call;
@@ -14,6 +15,12 @@ public interface BanDoCuApi {
     // Lấy danh mục
     @GET("category.php")
     Call<CategoryModel> getCategory();
+
+    @POST("get_product.php")
+    @FormUrlEncoded
+    Call<ProductModel> getProducts(
+            @Field("idcate") int idcate
+    );
 
     // Đăng ký người dùng
     @FormUrlEncoded
