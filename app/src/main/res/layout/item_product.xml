@@ -5,7 +5,7 @@
     <data>
 <variable
     name="productitem"
-    type="com.example.qlybandocu.models.Category" />
+    type="com.example.qlybandocu.models.Products" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
             <TextView
                 android:id="@+id/tv_nameproduct"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="1234"
+                android:text="@{productitem.strProduct}"
                 android:layout_marginTop="@dimen/_60sdp"
                 android:textSize="@dimen/_16ssp"
                 android:textColor="@color/purple_200"

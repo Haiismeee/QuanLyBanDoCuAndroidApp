@@ -11,11 +11,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qlybandocu.R;
 import com.example.qlybandocu.adapters.CategoryAdapter;
+import com.example.qlybandocu.adapters.PopularAdapter;
 import com.example.qlybandocu.databinding.ActivityHomeBinding;
 import com.example.qlybandocu.listener.CategoryListener;
 import com.example.qlybandocu.models.Category;
@@ -45,6 +47,9 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener 
         binding.rcCategory.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         binding.rcCategory.setLayoutManager(layoutManager);
+        binding.rcPopular.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager1 = new GridLayoutManager(this,3);
+        binding.rcPopular.setLayoutManager(layoutManager1);
         // Mở trang quản lý tài khoản khi click avatar
         binding.imgProfile.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, AccountActivity.class);
@@ -69,9 +74,9 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener 
             }
         });
         homeViewModel.productModelMutableLiveData(1).observe(this,productModel -> {
-            for (Products product: productModel.getResult()){
-                Log.d("logg", product.getStrProduct());
-
+            if(productModel.isSuccess()){
+                PopularAdapter adapter = new PopularAdapter(productModel.getResult());
+                binding.rcPopular.setAdapter(adapter);
             }
         });
     }

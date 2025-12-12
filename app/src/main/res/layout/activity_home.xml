@@ -14,6 +14,7 @@
             android:id="@+id/scrollContent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/bottombar"
             android:fillViewport="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -140,7 +141,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rc_category"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_120sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     app:layout_constraintTop_toBottomOf="@id/tvcategories"
@@ -164,7 +165,7 @@
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_120sdp"/>
+                    android:layout_height="wrap_content"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
