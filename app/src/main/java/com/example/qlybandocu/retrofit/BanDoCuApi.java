@@ -1,6 +1,8 @@
 package com.example.qlybandocu.retrofit;
 
 import com.example.qlybandocu.models.CategoryModel;
+import com.example.qlybandocu.models.ProductDetail;
+import com.example.qlybandocu.models.ProductDetailModel;
 import com.example.qlybandocu.models.ProductModel;
 import com.example.qlybandocu.models.UserModel;
 
@@ -20,6 +22,11 @@ public interface BanDoCuApi {
     @FormUrlEncoded
     Call<ProductModel> getProducts(
             @Field("idcate") int idcate
+    );
+    @POST("productdetail.php")
+    @FormUrlEncoded
+    Call<ProductDetailModel> getProductsDetail(
+            @Field("id") int id
     );
 
     // Đăng ký người dùng

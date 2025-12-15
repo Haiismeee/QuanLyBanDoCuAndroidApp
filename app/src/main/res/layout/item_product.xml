@@ -9,8 +9,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="@dimen/_5sdp"
         android:background="#EDEDED"
-        android:layout_width="@dimen/_120sdp"
+        android:layout_width="@dimen/_135sdp"
         android:layout_height="@dimen/_170sdp">
         <androidx.constraintlayout.widget.ConstraintLayout
             app:layout_constraintTop_toTopOf="parent"

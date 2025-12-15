@@ -20,11 +20,12 @@ import com.example.qlybandocu.adapters.CategoryAdapter;
 import com.example.qlybandocu.adapters.PopularAdapter;
 import com.example.qlybandocu.databinding.ActivityHomeBinding;
 import com.example.qlybandocu.listener.CategoryListener;
+import com.example.qlybandocu.listener.EventClickListener;
 import com.example.qlybandocu.models.Category;
 import com.example.qlybandocu.models.Products;
 import com.example.qlybandocu.viewModel.HomeViewModel;
 
-public class HomeActivity extends AppCompatActivity implements CategoryListener {
+public class HomeActivity extends AppCompatActivity implements CategoryListener, EventClickListener {
     HomeViewModel homeViewModel;
     ActivityHomeBinding binding;
 
@@ -75,7 +76,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener 
         });
         homeViewModel.productModelMutableLiveData(1).observe(this,productModel -> {
             if(productModel.isSuccess()){
-                PopularAdapter adapter = new PopularAdapter(productModel.getResult());
+                PopularAdapter adapter = new PopularAdapter(productModel.getResult(), this);
                 binding.rcPopular.setAdapter(adapter);
             }
         });
@@ -85,6 +86,14 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener 
     public void onCategoryClick(Category category) {
         Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
         intent.putExtra("idcate", category.getId());
+        intent.putExtra("namecate", category.getCategory());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onPopularClick(Products products) {
+        Intent intent = new Intent(getApplicationContext(), ShowDetailActivity.class);
+        intent.putExtra("id", products.getIdProduct());
         startActivity(intent);
     }
 }
