@@ -56,8 +56,17 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        // Đọc dữ liệu từ Paper
         List<Cart> carts = Paper.book().read("cart");
-        Utils.cartList = carts;
+
+        // KIỂM TRA QUAN TRỌNG:
+        if (carts != null) {
+            Utils.cartList = carts;
+        } else {
+            // Nếu chưa có gì thì khởi tạo list rỗng để không bị lỗi Null
+            Utils.cartList = new java.util.ArrayList<>();
+        }
+
         CartAdapter adapter = new CartAdapter(this, Utils.cartList, new ChangeNumListener() {
             @Override
             public void change() {

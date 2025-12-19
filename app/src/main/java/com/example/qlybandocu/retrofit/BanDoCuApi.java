@@ -57,12 +57,12 @@ public interface BanDoCuApi {
 
     @Multipart
     @POST("insertsp.php")
-    Observable<MessageModel> insertSp(
-                                       @Part("tensp") RequestBody tensp,
-                                       @Part("gia") RequestBody gia,
-                                       @Part("mota") RequestBody mota,
-                                       @Part("loai") RequestBody loai,
-                                       @Part("iduser") RequestBody iduser,
-                                       @Part MultipartBody.Part hinhanh
+    Call<MessageModel> insertSp(
+            @Part("tensp") RequestBody tensp,
+            @Part("gia") RequestBody gia,
+            @Part("mota") RequestBody mota,
+            @Part("loai") RequestBody loai,
+            @Part("iduser") RequestBody iduser,
+            @Part MultipartBody.Part hinhanh
     );
 }
