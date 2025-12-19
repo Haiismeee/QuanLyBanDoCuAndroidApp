@@ -73,4 +73,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.6.0")
     implementation("androidx.datastore:datastore-preferences:1.1.0")
     implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    //paper
+    implementation ("io.github.pilgr:paperdb:2.7.2")
 }
