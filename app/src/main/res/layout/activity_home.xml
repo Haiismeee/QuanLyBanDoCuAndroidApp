@@ -170,118 +170,160 @@
 
         </androidx.core.widget.NestedScrollView>
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/bottombar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_80sdp">
+            android:layout_height="@dimen/_90sdp"
+            android:clipChildren="false"
+            app:layout_constraintBottom_toBottomOf="parent">
+
             <com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/appbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:fabCradleMargin="@dimen/_5sdp"
-                app:fabCradleRoundedCornerRadius="@dimen/_40sdp"
-                app:fabCradleVerticalOffset="@dimen/_2sdp"
-                >
+                android:backgroundTint="#FFFFFF"
+                app:fabAlignmentMode="center"
+                app:fabCradleMargin="@dimen/_8sdp"
+                app:fabCradleRoundedCornerRadius="@dimen/_20sdp"
+                app:fabCradleVerticalOffset="@dimen/_6sdp"
+                app:elevation="@dimen/_8sdp">
+
                 <LinearLayout
-                    android:weightSum="10"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="5"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_8sdp">
+
                     <LinearLayout
-                        android:layout_weight="2"
-                        android:orientation="vertical"
+                        android:id="@+id/btnHome"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true">
                         <ImageView
-                            android:layout_gravity="center"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             android:src="@drawable/ic_home"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            app:tint="@color/purple_200"/>
                         <TextView
-                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Home"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
+                            android:textSize="@dimen/_9ssp"
+                            android:textColor="@color/purple_200"
+                            android:textStyle="bold"
+                            android:layout_marginTop="@dimen/_2sdp"/>
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_weight="2"
-                        android:orientation="vertical"
+                        android:id="@+id/btnInfo"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true">
                         <ImageView
-                            android:layout_gravity="center"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             android:src="@drawable/ic_info"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            app:tint="#9E9E9E"/>
                         <TextView
-                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Info"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
+                            android:textSize="@dimen/_9ssp"
+                            android:textColor="#9E9E9E"
+                            android:layout_marginTop="@dimen/_2sdp"/>
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_weight="2"
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content">
 
-                    </LinearLayout>
                     <LinearLayout
-                        android:layout_weight="2"
-                        android:orientation="vertical"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
+                    <LinearLayout
+                        android:id="@+id/btnSupport"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true">
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_support" />
-
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/ic_support"
+                            app:tint="#9E9E9E"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Support" />
-
+                            android:text="Support"
+                            android:textSize="@dimen/_9ssp"
+                            android:textColor="#9E9E9E"
+                            android:layout_marginTop="@dimen/_2sdp"/>
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_weight="2"
-                        android:orientation="vertical"
+                        android:id="@+id/btnSettings"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true">
                         <ImageView
-                            android:layout_gravity="center"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             android:src="@drawable/ic_settings"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            app:tint="#9E9E9E"/>
                         <TextView
-                            android:layout_gravity="center"
-                            android:text="Settings"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
+                            android:layout_height="wrap_content"
+                            android:text="Settings"
+                            android:textSize="@dimen/_9ssp"
+                            android:textColor="#9E9E9E"
+                            android:layout_marginTop="@dimen/_2sdp"/>
                     </LinearLayout>
-
-
 
                 </LinearLayout>
-
             </com.google.android.material.bottomappbar.BottomAppBar>
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                app:backgroundTint="@color/purple_200"
-                android:src="@drawable/ic_cart"
-                android:elevation="@dimen/_5sdp"
-                app:elevation="@dimen/_3sdp"
-                android:layout_gravity="center"
+                android:id="@+id/floatingbtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cart"
+                app:backgroundTint="@color/purple_200"
+                app:tint="#FFFFFF"
+                app:elevation="@dimen/_6sdp"
+                app:borderWidth="0dp"
+                app:maxImageSize="@dimen/_24sdp"
+                app:layout_anchor="@id/appbar"
+                app:layout_anchorGravity="top|center" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnThemSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_90sdp"
+            android:src="@android:drawable/ic_input_add"
+            app:backgroundTint="@color/purple_200"
+            app:tint="#FFFFFF"
+            app:elevation="@dimen/_6sdp"
+            app:pressedTranslationZ="@dimen/_12sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

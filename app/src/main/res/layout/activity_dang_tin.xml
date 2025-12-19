@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F4F8"
+    tools:context=".activities.DangTinActivity">
+
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="@dimen/_4sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/_16sdp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:src="@drawable/ic_arrow_back_24"
+            app:tint="#333333" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:text="Đăng tin bán"
+            android:textColor="#333333"
+            android:textSize="@dimen/_20ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/_20sdp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_220sdp"
+                android:layout_marginBottom="@dimen/_24sdp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="@dimen/_16sdp"
+                app:cardElevation="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imgProducts"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFF5EC"
+                        android:scaleType="centerCrop" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imgCamera"
+                            android:layout_width="@dimen/_64sdp"
+                            android:layout_height="@dimen/_64sdp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:src="@android:drawable/ic_menu_camera"
+                            app:tint="#FF6600" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:text="Thêm hình ảnh thực tế"
+                            android:textColor="#FF6600"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="(Tối đa 5 ảnh)"
+                            android:textColor="#999999"
+                            android:textSize="@dimen/_12ssp" />
+                    </LinearLayout>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="Thông tin chi tiết"
+                android:textColor="#555555"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_24sdp"
+                android:background="@drawable/bg_input_orange"
+                android:backgroundTint="#FFFFFF"
+                android:elevation="@dimen/_2sdp"
+                android:orientation="vertical"
+                android:padding="@dimen/_20sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_4sdp"
+                    android:text="Danh mục"
+                    android:textColor="#FF6600"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_55sdp"
+                    android:layout_marginBottom="@dimen/_16sdp"
+                    android:background="@drawable/bg_input_orange">
+
+                    <Spinner
+                        android:id="@+id/spinnerLoai"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="@dimen/_4sdp" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_24sdp"
+                        android:layout_height="@dimen/_24sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:src="@android:drawable/arrow_down_float"
+                        app:tint="#757575" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_4sdp"
+                    android:text="Tiêu đề tin đăng"
+                    android:textColor="#FF6600"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtTenSp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_55sdp"
+                    android:layout_marginBottom="@dimen/_16sdp"
+                    android:background="@drawable/bg_input_orange"
+                    android:hint="Vd: iPhone 15 Pro Max 256GB..."
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp"
+                    android:singleLine="true"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/_16ssp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_4sdp"
+                    android:text="Giá mong muốn"
+                    android:textColor="#FF6600"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edtGia"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_55sdp"
+                        android:background="@drawable/bg_input_orange"
+                        android:hint="0"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="@dimen/_16sdp"
+                        android:paddingEnd="@dimen/_50sdp"
+                        android:textColor="#333333"
+                        android:textSize="@dimen/_18ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:text="đ"
+                        android:textColor="#FF6600"
+                        android:textSize="@dimen/_18ssp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="Mô tả sản phẩm"
+                android:textColor="#555555"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtMoTa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_30sdp"
+                android:background="@drawable/bg_input_orange"
+                android:gravity="top|start"
+                android:hint="Mô tả càng chi tiết càng dễ bán...\n- Tình trạng ngoại hình\n- Thời gian bảo hành\n- Phụ kiện đi kèm"
+                android:lineSpacingExtra="@dimen/_4sdp"
+                android:minHeight="@dimen/_150sdp"
+                android:padding="@dimen/_16sdp"
+                android:textSize="@dimen/_15ssp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnDangTin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:background="@drawable/bg_input_orange"
+                android:backgroundTint="#FF6600"
+                android:elevation="@dimen/_4sdp"
+                android:text="ĐĂNG TIN NGAY"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/_18ssp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

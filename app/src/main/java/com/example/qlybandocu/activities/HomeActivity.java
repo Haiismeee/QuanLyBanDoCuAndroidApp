@@ -3,6 +3,7 @@ package com.example.qlybandocu.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,14 +49,35 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener,
         binding.rcCategory.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         binding.rcCategory.setLayoutManager(layoutManager);
+
         binding.rcPopular.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager1 = new GridLayoutManager(this,3);
         binding.rcPopular.setLayoutManager(layoutManager1);
-        // Mở trang quản lý tài khoản khi click avatar
+
+        // 1. Nút Giỏ hàng (ở giữa thanh menu dưới)
+        binding.floatingbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cart = new Intent(getApplicationContext(), CartActivity.class);
+                startActivity(cart);
+            }
+        });
+
+        // 2. Mở trang quản lý tài khoản khi click avatar
         binding.imgProfile.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, AccountActivity.class);
             startActivity(intent);
         });
+
+        // --- BỔ SUNG: Nút Đăng Tin Mới (Nút màu cam ở góc) ---
+        // Lưu ý: Đảm bảo bạn đã thêm id="@+id/btnThemSp" vào activity_home.xml như hướng dẫn trước
+        if (binding.btnThemSp != null) { // Kiểm tra null để tránh crash nếu lỡ chưa sửa XML
+            binding.btnThemSp.setOnClickListener(view -> {
+                Intent intent = new Intent(HomeActivity.this, DangTinActivity.class);
+                startActivity(intent);
+            });
+        }
+        // -----------------------------------------------------
     }
 
     private void initData() {
