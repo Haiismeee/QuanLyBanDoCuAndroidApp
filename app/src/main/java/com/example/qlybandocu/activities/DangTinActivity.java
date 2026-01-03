@@ -107,11 +107,12 @@ public class DangTinActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && data != null) {
             Uri uri = data.getData();
 
-            // Sửa chỗ này: Gọi hàm mới
+            // --- SỬA Ở ĐÂY ---
             mediaPath = getPathFromUri(uri);
+            // ----------------
 
-            binding.imgProducts.setImageURI(uri);
-            binding.imgCamera.setVisibility(View.GONE);
+            binding.imgProducts.setImageURI(uri); // Hiển thị lên giao diện
+            // binding.imgCamera.setVisibility(View.GONE); // Ẩn icon camera nếu cần
         }
     }
 
@@ -130,28 +131,30 @@ public class DangTinActivity extends AppCompatActivity {
             return;
         }
 
-        // Kiểm tra file có tồn tại không trước khi gửi
         File file = new File(mediaPath);
         if (!file.exists()) {
-            Toast.makeText(this, "Không tìm thấy file ảnh!", Toast.LENGTH_SHORT).show();
-            Log.e("UploadError", "File not found: " + mediaPath);
+            Toast.makeText(this, "Lỗi ảnh: Không tìm thấy file trong bộ nhớ đệm", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Lấy ID User
         String str_iduser = (Utils.user_current != null && Utils.user_current.getId() > 0)
-                ? String.valueOf(Utils.user_current.getId()) : "1";
+                ? String.valueOf(Utils.user_current.getId()) : "0";
 
-        // --- QUAY LẠI CẤU HÌNH CHUẨN (MULTIPART/FORM-DATA) ---
-        // PHP thường ưa chuộng kiểu này nhất
+        // --- PHẦN SỬA ĐỔI QUAN TRỌNG ---
+
+        // 1. Ảnh thì giữ nguyên multipart/form-data
         RequestBody requestBodyImg = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part multipartBodyImg = MultipartBody.Part.createFormData("hinhanh", file.getName(), requestBodyImg);
 
-        RequestBody requestBodyTen = RequestBody.create(MediaType.parse("multipart/form-data"), str_ten);
-        RequestBody requestBodyGia = RequestBody.create(MediaType.parse("multipart/form-data"), str_gia);
-        RequestBody requestBodyMoTa = RequestBody.create(MediaType.parse("multipart/form-data"), str_mota);
-        RequestBody requestBodyLoai = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(idCategorySelected));
-        RequestBody requestBodyIdUser = RequestBody.create(MediaType.parse("multipart/form-data"), str_iduser);
+        // 2. Chữ thì đổi sang text/plain để PHP dễ đọc hơn
+        RequestBody requestBodyTen = RequestBody.create(MediaType.parse("text/plain"), str_ten);
+        RequestBody requestBodyGia = RequestBody.create(MediaType.parse("text/plain"), str_gia);
+        RequestBody requestBodyMoTa = RequestBody.create(MediaType.parse("text/plain"), str_mota);
+        RequestBody requestBodyLoai = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(idCategorySelected));
+        RequestBody requestBodyIdUser = RequestBody.create(MediaType.parse("text/plain"), str_iduser);
 
+        // Gọi API
         banDoCuApi.insertSp(requestBodyTen, requestBodyGia, requestBodyMoTa, requestBodyLoai, requestBodyIdUser, multipartBodyImg)
                 .enqueue(new Callback<MessageModel>() {
                     @Override
@@ -159,35 +162,37 @@ public class DangTinActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             if (response.body() != null && response.body().isSuccess()) {
                                 Toast.makeText(getApplicationContext(), "Đăng tin thành công!", Toast.LENGTH_SHORT).show();
-                                finish();
+                                finish(); // Đóng màn hình quay về Home
                             } else {
-                                // Server trả về success: false
                                 String msg = (response.body() != null) ? response.body().getMessage() : "Lỗi không xác định";
                                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Lỗi Server (Code: " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                            // In lỗi ra logcat để xem nếu server trả về 500
+                            Log.e("UploadError", "Code: " + response.code() + ", Mess: " + response.message());
+                            Toast.makeText(getApplicationContext(), "Lỗi Server: " + response.code(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
+                        Log.e("UploadError", "Lỗi kết nối: " + t.getMessage());
                         Toast.makeText(getApplicationContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("UploadError", "Lỗi: " + t.getMessage());
                     }
                 });
     }
 
-    private String getPathFromUri(Uri uri) {
+    private String getPathFromUri(android.net.Uri uri) {
         try {
-            // Tạo file tạm trong thư mục cache của app
-            File file = new File(getCacheDir(), "temp_image_" + System.currentTimeMillis() + ".png");
+            android.content.ContentResolver contentResolver = getContentResolver();
+            // Tạo tên file tạm
+            String fileName = "temp_image_" + System.currentTimeMillis() + ".png";
+            java.io.File file = new java.io.File(getCacheDir(), fileName);
 
-            // Mở luồng đọc từ Uri và luồng ghi vào file tạm
-            java.io.InputStream inputStream = getContentResolver().openInputStream(uri);
+            // Copy dữ liệu từ Uri vào file tạm
+            java.io.InputStream inputStream = contentResolver.openInputStream(uri);
             java.io.OutputStream outputStream = new java.io.FileOutputStream(file);
 
-            // Copy dữ liệu
             byte[] buffer = new byte[1024];
             int length;
             while ((length = inputStream.read(buffer)) > 0) {
@@ -197,8 +202,7 @@ public class DangTinActivity extends AppCompatActivity {
             outputStream.close();
             inputStream.close();
 
-            // Trả về đường dẫn tuyệt đối của file tạm
-            return file.getAbsolutePath();
+            return file.getAbsolutePath(); // Trả về đường dẫn file thật
         } catch (Exception e) {
             e.printStackTrace();
             return null;
