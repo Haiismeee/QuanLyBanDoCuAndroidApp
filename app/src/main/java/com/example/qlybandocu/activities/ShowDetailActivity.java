@@ -1,7 +1,11 @@
 package com.example.qlybandocu.activities;
 
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +34,8 @@ public class ShowDetailActivity extends AppCompatActivity {
     ActivityShowDetailBinding binding;
     int amount = 1;
     ProductDetail productDetail;
+    Button btnContactSeller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,9 @@ public class ShowDetailActivity extends AppCompatActivity {
         getData(id);
         eventClick();
         showToData(id);
+        btnContactSeller = findViewById(R.id.btnContactSeller);
+
+        btnContactSeller.setOnClickListener(v -> showContactDialog());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -135,4 +144,40 @@ public class ShowDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void showContactDialog() {
+        String[] options = {"Gọi điện", "Gửi email"};
+
+        new AlertDialog.Builder(this)
+                .setTitle("Liên hệ người bán")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        callSeller();
+                    } else {
+                        emailSeller();
+                    }
+                })
+                .show();
+    }
+    private void callSeller() {
+        String phone = "0901234567"; // demo
+
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + phone));
+        startActivity(intent);
+    }
+
+    private void emailSeller() {
+        String email = "seller@gmail.com"; // demo
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:" + email));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Liên hệ về sản phẩm");
+        intent.putExtra(Intent.EXTRA_TEXT, "Tôi muốn hỏi thêm thông tin về sản phẩm.");
+
+        startActivity(Intent.createChooser(intent, "Chọn ứng dụng email"));
+    }
+
+
+
 }

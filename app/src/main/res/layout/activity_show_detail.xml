@@ -88,19 +88,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnadd"
                 app:layout_constraintTop_toBottomOf="@id/txtdesc"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:id="@+id/btnadd"
-                android:text="Add to cart"
-                android:textColor="@color/white"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_marginStart="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_25sdp"
+                android:text="Add to cart"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:background="@drawable/back_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnContactSeller"
+                app:layout_constraintTop_toBottomOf="@id/btnadd"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_25sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="Liên hệ người bán"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
                 android:background="@drawable/back_order"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
 

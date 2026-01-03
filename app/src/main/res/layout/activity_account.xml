@@ -8,47 +8,70 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="@dimen/_16sdp">
 
+        <!-- Tiêu đề -->
         <TextView
             android:id="@+id/tvAccountTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quản lý tài khoản"
-            android:textSize="20sp"
+            android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <!-- Các chức năng cơ bản: thông tin, đổi mật khẩu, đăng xuất -->
+        <!-- Chỉnh sửa thông tin -->
         <Button
             android:id="@+id/btnEditProfile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Chỉnh sửa thông tin"
+            android:textSize="@dimen/_14ssp"
+            android:paddingVertical="@dimen/_12sdp"
             app:layout_constraintTop_toBottomOf="@id/tvAccountTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/_16sdp"/>
 
+        <!-- Danh sách tin đã đăng -->
+        <Button
+            android:id="@+id/btnMyPosts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Danh sách tin đã đăng"
+            android:textSize="@dimen/_14ssp"
+            android:paddingVertical="@dimen/_12sdp"
+            app:layout_constraintTop_toBottomOf="@id/btnEditProfile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_8sdp"/>
+
+        <!-- Đổi mật khẩu -->
         <Button
             android:id="@+id/btnChangePassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Đổi mật khẩu"
-            app:layout_constraintTop_toBottomOf="@id/btnEditProfile"
+            android:textSize="@dimen/_14ssp"
+            android:paddingVertical="@dimen/_12sdp"
+            app:layout_constraintTop_toBottomOf="@id/btnMyPosts"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="@dimen/_8sdp"/>
 
+        <!-- Đăng xuất -->
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Đăng xuất"
+            android:textSize="@dimen/_14ssp"
+            android:paddingVertical="@dimen/_12sdp"
             app:layout_constraintTop_toBottomOf="@id/btnChangePassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="@dimen/_8sdp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

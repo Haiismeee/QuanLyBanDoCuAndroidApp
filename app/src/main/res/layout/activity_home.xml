@@ -71,12 +71,19 @@
                     android:background="@drawable/back_edit"
                     android:drawableLeft="@drawable/ic_search"
                     android:drawablePadding="@dimen/_5sdp"
+
+                    android:singleLine="true"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+
                     android:layout_marginStart="@dimen/_15sdp"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:layout_marginTop="@dimen/_10sdp"
+
                     app:layout_constraintTop_toBottomOf="@id/tv"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
+
 
                 <!-- Banner -->
                 <androidx.constraintlayout.widget.ConstraintLayout

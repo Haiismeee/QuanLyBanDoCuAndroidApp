@@ -3,6 +3,7 @@ package com.example.qlybandocu.retrofit;
 
 import com.example.qlybandocu.models.CategoryModel;
 import com.example.qlybandocu.models.MessageModel;
+import com.example.qlybandocu.models.MyPostModel;
 import com.example.qlybandocu.models.ProductDetail;
 import com.example.qlybandocu.models.ProductDetailModel;
 import com.example.qlybandocu.models.ProductModel;
@@ -22,22 +23,24 @@ import retrofit2.http.Part;
 
 public interface BanDoCuApi {
 
-    // Lấy danh mục
+    // ===== DANH MỤC =====
     @GET("category.php")
     Call<CategoryModel> getCategory();
 
-    @POST("get_product.php")
+    // ===== SẢN PHẨM =====
     @FormUrlEncoded
+    @POST("get_product.php")
     Call<ProductModel> getProducts(
             @Field("idcate") int idcate
     );
-    @POST("productdetail.php")
+
     @FormUrlEncoded
+    @POST("productdetail.php")
     Call<ProductDetailModel> getProductsDetail(
             @Field("id") int id
     );
 
-    // Đăng ký người dùng
+    // ===== USER =====
     @FormUrlEncoded
     @POST("register.php")
     Call<UserModel> registerUser(
@@ -47,7 +50,6 @@ public interface BanDoCuApi {
             @Field("phone") String phone
     );
 
-    // Đăng nhập người dùng
     @FormUrlEncoded
     @POST("login.php")
     Call<UserModel> loginUser(
@@ -55,14 +57,40 @@ public interface BanDoCuApi {
             @Field("password") String password
     );
 
+    // ===== UPLOAD ẢNH =====
     @Multipart
-    @POST("insertsp.php")
-    Call<MessageModel> insertSp(
-            @Part("tensp") RequestBody tensp,
-            @Part("gia") RequestBody gia,
-            @Part("mota") RequestBody mota,
-            @Part("loai") RequestBody loai,
-            @Part("iduser") RequestBody iduser,
-            @Part MultipartBody.Part hinhanh
+    @POST("upload_image.php")
+    Call<MessageModel> uploadImage(
+            @Part MultipartBody.Part file
     );
+
+    // ===== ĐĂNG TIN (INSERT VÀO products) =====
+    @FormUrlEncoded
+    @POST("insertsp2.php")
+    Call<MessageModel> insertProduct(
+            @Field("tensp") String tensp,
+            @Field("hinhanh") String hinhanh,
+            @Field("idcategory") int idcategory,
+            @Field("iduser") int iduser
+    );
+
+    @FormUrlEncoded
+    @POST("sync_user.php")
+    Call<UserModel> syncUser(
+            @Field("firebase_uid") String firebaseUid,
+            @Field("email") String email,
+            @Field("name") String name
+    );
+    @POST("get_my_posts.php")
+    @FormUrlEncoded
+    Call<MyPostModel> getMyPosts(
+            @Field("iduser") int iduser
+    );
+    @FormUrlEncoded
+    @POST("search_product.php")
+    Call<ProductModel> searchProduct(
+            @Field("keyword") String keyword
+    );
+
+
 }

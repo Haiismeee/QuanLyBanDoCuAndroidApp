@@ -2,8 +2,8 @@ package com.example.qlybandocu.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qlybandocu.R;
 import com.example.qlybandocu.adapters.CategoryAdapter;
@@ -26,17 +25,30 @@ import com.example.qlybandocu.models.Category;
 import com.example.qlybandocu.models.Products;
 import com.example.qlybandocu.viewModel.HomeViewModel;
 
-public class HomeActivity extends AppCompatActivity implements CategoryListener, EventClickListener {
-    HomeViewModel homeViewModel;
+import java.util.ArrayList;
+import java.util.List;
+
+public class HomeActivity extends AppCompatActivity
+        implements CategoryListener, EventClickListener {
+
     ActivityHomeBinding binding;
+    HomeViewModel homeViewModel;
+
+    EditText editsearch;
+
+    PopularAdapter popularAdapter;
+    List<Products> popularList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_home);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
+
         initView();
         initData();
+        initSearch();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -45,68 +57,124 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener,
         });
     }
 
+    // ================= VIEW =================
+
     private void initView() {
+
+        // CATEGORY
         binding.rcCategory.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        binding.rcCategory.setLayoutManager(layoutManager);
+        binding.rcCategory.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        );
 
+        // POPULAR
         binding.rcPopular.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager1 = new GridLayoutManager(this,3);
-        binding.rcPopular.setLayoutManager(layoutManager1);
+        binding.rcPopular.setLayoutManager(new GridLayoutManager(this, 3));
 
-        // 1. Nút Giỏ hàng (ở giữa thanh menu dưới)
-        binding.floatingbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cart = new Intent(getApplicationContext(), CartActivity.class);
-                startActivity(cart);
-            }
-        });
+        popularAdapter = new PopularAdapter(popularList, this);
+        binding.rcPopular.setAdapter(popularAdapter);
 
-        // 2. Mở trang quản lý tài khoản khi click avatar
-        binding.imgProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, AccountActivity.class);
-            startActivity(intent);
-        });
+        // Cart
+        binding.floatingbtn.setOnClickListener(v ->
+                startActivity(new Intent(this, CartActivity.class))
+        );
 
-        // --- BỔ SUNG: Nút Đăng Tin Mới (Nút màu cam ở góc) ---
-        // Lưu ý: Đảm bảo bạn đã thêm id="@+id/btnThemSp" vào activity_home.xml như hướng dẫn trước
-        if (binding.btnThemSp != null) { // Kiểm tra null để tránh crash nếu lỡ chưa sửa XML
-            binding.btnThemSp.setOnClickListener(view -> {
-                Intent intent = new Intent(HomeActivity.this, DangTinActivity.class);
-                startActivity(intent);
-            });
+        // Account
+        binding.imgProfile.setOnClickListener(v ->
+                startActivity(new Intent(this, AccountActivity.class))
+        );
+
+        // Đăng tin
+        if (binding.btnThemSp != null) {
+            binding.btnThemSp.setOnClickListener(v ->
+                    startActivity(new Intent(this, DangTinActivity.class))
+            );
         }
-        // -----------------------------------------------------
+
+        // ===== Bottom menu =====
+
+        // INFO
+        binding.btnInfo.setOnClickListener(v ->
+                startActivity(new Intent(this, InfoActivity.class))
+        );
+
+        // SUPPORT
+        binding.btnSupport.setOnClickListener(v ->
+                startActivity(new Intent(this, SupportActivity.class))
+        );
+
+        // SETTINGS
+        binding.btnSettings.setOnClickListener(v ->
+                startActivity(new Intent(this, SettingsActivity.class))
+        );
+
     }
+
+    // ================= DATA =================
 
     private void initData() {
+
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        homeViewModel.categoryModelMutableLiveData().observe(this, categoryModel -> {
 
-            if (categoryModel == null) {
-                Log.e("API_ERROR", "Response null từ server");
-                return;
-            }
+        // CATEGORY
+        homeViewModel.categoryModelMutableLiveData()
+                .observe(this, categoryModel -> {
+                    if (categoryModel != null && categoryModel.isSuccess()) {
+                        binding.rcCategory.setAdapter(
+                                new CategoryAdapter(categoryModel.getResult(), this)
+                        );
+                    }
+                });
 
-            if (categoryModel.isSuccess()) {
-                CategoryAdapter adapter = new CategoryAdapter(categoryModel.getResult(), this);
-                binding.rcCategory.setAdapter(adapter);
-            } else {
-                Log.e("API_ERROR", "API success=false: " + categoryModel.getMessage());
+        // POPULAR – LOAD 1 LẦN
+        homeViewModel.productModelMutableLiveData(1)
+                .observe(this, productModel -> {
+                    if (productModel != null && productModel.isSuccess()) {
+                        popularList.clear();
+                        popularList.addAll(productModel.getResult());
+                        popularAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    // ================= SEARCH (LOCAL FILTER) =================
+
+    private void initSearch() {
+        editsearch = findViewById(R.id.editsearch);
+
+        editsearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                String keyword = editsearch.getText().toString()
+                        .trim().toLowerCase();
+
+                List<Products> filtered = new ArrayList<>();
+
+                if (keyword.isEmpty()) {
+                    filtered.addAll(popularList);
+                } else {
+                    for (Products p : popularList) {
+                        if (p.getStrProduct() != null &&
+                                p.getStrProduct().toLowerCase().contains(keyword)) {
+                            filtered.add(p);
+                        }
+                    }
+                }
+
+                binding.rcPopular.setAdapter(
+                        new PopularAdapter(filtered, this)
+                );
+                return true;
             }
-        });
-        homeViewModel.productModelMutableLiveData(1).observe(this,productModel -> {
-            if(productModel.isSuccess()){
-                PopularAdapter adapter = new PopularAdapter(productModel.getResult(), this);
-                binding.rcPopular.setAdapter(adapter);
-            }
+            return false;
         });
     }
+
+    // ================= CLICK =================
 
     @Override
     public void onCategoryClick(Category category) {
-        Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
+        Intent intent = new Intent(this, CategoryActivity.class);
         intent.putExtra("idcate", category.getId());
         intent.putExtra("namecate", category.getCategory());
         startActivity(intent);
@@ -114,7 +182,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryListener,
 
     @Override
     public void onPopularClick(Products products) {
-        Intent intent = new Intent(getApplicationContext(), ShowDetailActivity.class);
+        Intent intent = new Intent(this, ShowDetailActivity.class);
         intent.putExtra("id", products.getIdProduct());
         startActivity(intent);
     }

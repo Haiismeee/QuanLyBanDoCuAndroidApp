@@ -32,6 +32,8 @@ public class AccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseFirestore db;
+    private Button btnMyPosts;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,10 @@ public class AccountActivity extends AppCompatActivity {
         btnEditProfile.setOnClickListener(v -> editProfile());
         btnChangePassword.setOnClickListener(v -> changePassword());
         btnLogout.setOnClickListener(v -> logout());
+        btnMyPosts = findViewById(R.id.btnMyPosts);
+        btnMyPosts.setOnClickListener(v -> {
+            startActivity(new Intent(AccountActivity.this, MyPostActivity.class));
+        });
     }
 
     private void loadUserInfo() {
