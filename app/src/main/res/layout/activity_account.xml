@@ -8,9 +8,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/_16sdp">
+        android:padding="@dimen/_16sdp"
+        android:background="#FAFAFA">
 
-        <!-- Tiêu đề -->
+        <!-- TIÊU ĐỀ -->
         <TextView
             android:id="@+id/tvAccountTitle"
             android:layout_width="wrap_content"
@@ -18,60 +19,89 @@
             android:text="Quản lý tài khoản"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
+            android:textColor="@color/purple_200"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <!-- Chỉnh sửa thông tin -->
-        <Button
+        <!-- CHỈNH SỬA THÔNG TIN -->
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnEditProfile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Chỉnh sửa thông tin"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"
+            android:background="@drawable/back_order"
             android:paddingVertical="@dimen/_12sdp"
             app:layout_constraintTop_toBottomOf="@id/tvAccountTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/_16sdp"/>
+            android:layout_marginTop="@dimen/_20sdp"/>
 
-        <!-- Danh sách tin đã đăng -->
-        <Button
-            android:id="@+id/btnMyPosts"
+        <!-- LỊCH SỬ ĐƠN HÀNG -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOrderHistory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Danh sách tin đã đăng"
+            android:text="Lịch sử đơn hàng"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"
+            android:background="@drawable/back_order"
             android:paddingVertical="@dimen/_12sdp"
             app:layout_constraintTop_toBottomOf="@id/btnEditProfile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/_8sdp"/>
+            android:layout_marginTop="@dimen/_10sdp"/>
 
-        <!-- Đổi mật khẩu -->
-        <Button
+        <!-- DANH SÁCH TIN ĐÃ ĐĂNG (CÓ THỂ GIỮ HOẶC BỎ) -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnMyPosts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Danh sách tin đã đăng"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp"
+            android:background="@drawable/back_order"
+            android:paddingVertical="@dimen/_12sdp"
+            app:layout_constraintTop_toBottomOf="@id/btnOrderHistory"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_10sdp"/>
+
+        <!-- ĐỔI MẬT KHẨU -->
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnChangePassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Đổi mật khẩu"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"
+            android:background="@drawable/back_order"
             android:paddingVertical="@dimen/_12sdp"
             app:layout_constraintTop_toBottomOf="@id/btnMyPosts"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/_8sdp"/>
+            android:layout_marginTop="@dimen/_10sdp"/>
 
-        <!-- Đăng xuất -->
-        <Button
+        <!-- ĐĂNG XUẤT -->
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnLogout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Đăng xuất"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"
+            android:background="@drawable/back_order"
             android:paddingVertical="@dimen/_12sdp"
             app:layout_constraintTop_toBottomOf="@id/btnChangePassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/_8sdp"/>
+            android:layout_marginTop="@dimen/_10sdp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

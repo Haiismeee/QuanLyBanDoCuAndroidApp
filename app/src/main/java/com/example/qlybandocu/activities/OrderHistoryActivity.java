@@ -37,18 +37,30 @@ public class OrderHistoryActivity extends AppCompatActivity {
     }
 
     private void loadOrders() {
+
+        if (Utils.user_current == null) {
+            Toast.makeText(this,
+                    "Vui lòng đăng nhập",
+                    Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         int iduser = Utils.user_current.getId();
 
         api.getOrders(iduser).enqueue(new Callback<OrderModel>() {
             @Override
-            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+            public void onResponse(Call<OrderModel> call,
+                                   Response<OrderModel> response) {
+
                 if (response.body() != null && response.body().isSuccess()) {
                     recyclerView.setAdapter(
                             new OrderAdapter(response.body().getResult())
                     );
                 } else {
                     Toast.makeText(OrderHistoryActivity.this,
-                            "Không có đơn hàng", Toast.LENGTH_SHORT).show();
+                            "Chưa có đơn hàng",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -59,4 +71,5 @@ public class OrderHistoryActivity extends AppCompatActivity {
             }
         });
     }
+
 }

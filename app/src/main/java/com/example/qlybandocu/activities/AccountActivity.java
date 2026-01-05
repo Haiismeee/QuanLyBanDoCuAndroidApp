@@ -67,6 +67,11 @@ public class AccountActivity extends AppCompatActivity {
         btnMyPosts.setOnClickListener(v -> {
             startActivity(new Intent(AccountActivity.this, MyPostActivity.class));
         });
+        findViewById(R.id.btnOrderHistory).setOnClickListener(v -> {
+            startActivity(new Intent(
+                    AccountActivity.this, OrderHistoryActivity.class));
+        });
+
     }
 
     private void loadUserInfo() {

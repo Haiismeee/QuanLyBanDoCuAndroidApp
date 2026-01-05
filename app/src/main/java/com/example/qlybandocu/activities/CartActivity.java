@@ -1,8 +1,10 @@
 package com.example.qlybandocu.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,14 +48,26 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void initControl() {
-        binding.btncheckout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String cart = new Gson().toJson(Utils.cartList);
-                Log.d("loggg", cart);
+        binding.btncheckout.setOnClickListener(view -> {
+
+            if (Utils.cartList == null || Utils.cartList.isEmpty()) {
+                Toast.makeText(this, "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            // Tính tổng tiền
+            double total = 0;
+            for (Cart cart : Utils.cartList) {
+                total += cart.getAmount() * cart.getProductDetail().getPrice();
+            }
+
+            // Sang PaymentActivity
+            Intent intent = new Intent(CartActivity.this, PaymentActivity.class);
+            intent.putExtra("total_price", (int) total); // mock int cho gọn
+            startActivity(intent);
         });
     }
+
 
     private void initData() {
         // Đọc dữ liệu từ Paper

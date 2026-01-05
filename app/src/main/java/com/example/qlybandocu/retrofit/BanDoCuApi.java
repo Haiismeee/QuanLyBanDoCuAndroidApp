@@ -100,7 +100,8 @@ public interface BanDoCuApi {
             @Field("phonenumber") String phone,
             @Field("total") double total,
             @Field("quantity") int quantity,
-            @Field("items") String itemsJson
+            @Field("items") String itemsJson,
+            @Field("payment_method") String paymentMethod
     );
 
     @FormUrlEncoded

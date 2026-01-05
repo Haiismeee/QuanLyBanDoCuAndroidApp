@@ -40,7 +40,7 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
                         android:textColor="@color/purple_200"
-                        android:text="Items"
+                        android:text="Đơn giá"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
@@ -63,7 +63,7 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/_15ssp"
                         android:textColor="@color/purple_200"
-                        android:text="Total"
+                        android:text="Thành tiền"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView

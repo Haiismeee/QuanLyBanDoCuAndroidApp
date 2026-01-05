@@ -9,15 +9,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.qlybandocu.R;
+import com.example.qlybandocu.Utils.Utils;
 import com.example.qlybandocu.models.Cart;
 import com.example.qlybandocu.models.MessageModel;
 import com.example.qlybandocu.models.ProductDetail;
 import com.example.qlybandocu.retrofit.BanDoCuApi;
 import com.example.qlybandocu.retrofit.RetrofitInstance;
-import com.example.qlybandocu.Utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,13 +38,16 @@ public class PaymentActivity extends AppCompatActivity {
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         radioGroupPayment = findViewById(R.id.radioGroupPayment);
 
-        // Hiển thị tổng tiền từ giỏ hàng
+        // ===== TÍNH & HIỂN THỊ TỔNG TIỀN (SỬA LỖI 3.45E7) =====
         double total = 0;
         for (Cart cart : Utils.cartList) {
             total += cart.getAmount()
                     * cart.getProductDetail().getPrice();
         }
-        tvTotalPrice.setText("Tổng tiền: " + total + " đ");
+
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        tvTotalPrice.setText("Tổng tiền: " + decimalFormat.format(total) + " đ");
+        // =====================================================
 
         findViewById(R.id.btnConfirmPayment)
                 .setOnClickListener(v -> createOrder());
@@ -67,8 +72,11 @@ public class PaymentActivity extends AppCompatActivity {
         }
 
         int iduser = Utils.user_current.getId();
-        String address = "123 Nguyễn Văn A";   // mock
-        String phone = "0901234567";           // mock
+
+        // MOCK THÔNG TIN
+        String address = "123 Nguyễn Văn A";
+        String phone = "0901234567";
+        String paymentMethod = getPaymentMethod();
 
         double total = 0;
         int quantity = 0;
@@ -93,9 +101,9 @@ public class PaymentActivity extends AppCompatActivity {
 
             String itemsJson = jsonArray.toString();
 
-            BanDoCuApi api =
-                    RetrofitInstance.getRetrofit()
-                            .create(BanDoCuApi.class);
+            BanDoCuApi api = RetrofitInstance
+                    .getRetrofit()
+                    .create(BanDoCuApi.class);
 
             api.createOrder(
                     iduser,
@@ -103,7 +111,8 @@ public class PaymentActivity extends AppCompatActivity {
                     phone,
                     total,
                     quantity,
-                    itemsJson
+                    itemsJson,
+                    paymentMethod
             ).enqueue(new Callback<MessageModel>() {
                 @Override
                 public void onResponse(Call<MessageModel> call,
@@ -117,6 +126,7 @@ public class PaymentActivity extends AppCompatActivity {
                                         getPaymentMethod() + ")",
                                 Toast.LENGTH_LONG).show();
 
+                        // Clear giỏ hàng
                         Utils.cartList.clear();
 
                         startActivity(new Intent(
