@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/_24sdp"
+    android:background="#FFFFFF">
+
+    <!-- Icon thành công -->
+    <ImageView
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:src="@android:drawable/checkbox_on_background"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:contentDescription="success"/>
+
+    <!-- Text thành công -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đặt hàng thành công!"
+        android:textSize="@dimen/_20ssp"
+        android:textStyle="bold"
+        android:textColor="#FF4B3A"
+        android:layout_marginBottom="@dimen/_8sdp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cảm ơn bạn đã sử dụng ứng dụng"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="#666666"
+        android:layout_marginBottom="@dimen/_24sdp"/>
+
+    <!-- Nút quay về Home -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnBackHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="VỀ TRANG CHỦ"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/back_order"/>
+</LinearLayout>

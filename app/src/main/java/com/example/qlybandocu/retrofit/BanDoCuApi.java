@@ -4,6 +4,7 @@ package com.example.qlybandocu.retrofit;
 import com.example.qlybandocu.models.CategoryModel;
 import com.example.qlybandocu.models.MessageModel;
 import com.example.qlybandocu.models.MyPostModel;
+import com.example.qlybandocu.models.OrderModel;
 import com.example.qlybandocu.models.ProductDetail;
 import com.example.qlybandocu.models.ProductDetailModel;
 import com.example.qlybandocu.models.ProductModel;
@@ -91,6 +92,27 @@ public interface BanDoCuApi {
     Call<ProductModel> searchProduct(
             @Field("keyword") String keyword
     );
+    @FormUrlEncoded
+    @POST("create_order.php")
+    Call<MessageModel> createOrder(
+            @Field("iduser") int iduser,
+            @Field("address") String address,
+            @Field("phonenumber") String phone,
+            @Field("total") double total,
+            @Field("quantity") int quantity,
+            @Field("items") String itemsJson
+    );
 
+    @FormUrlEncoded
+    @POST("update_payment.php")
+    Call<MessageModel> updatePayment(
+            @Field("idorder") int idorder,
+            @Field("payment_method") String paymentMethod
+    );
+    @FormUrlEncoded
+    @POST("get_orders.php")
+    Call<OrderModel> getOrders(
+            @Field("iduser") int iduser
+    );
 
 }
