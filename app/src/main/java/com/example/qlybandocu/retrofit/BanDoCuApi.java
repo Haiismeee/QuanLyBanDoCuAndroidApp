@@ -5,15 +5,13 @@ import com.example.qlybandocu.models.CategoryModel;
 import com.example.qlybandocu.models.MessageModel;
 import com.example.qlybandocu.models.MyPostModel;
 import com.example.qlybandocu.models.OrderModel;
-import com.example.qlybandocu.models.ProductDetail;
-import com.example.qlybandocu.models.ProductDetailModel;
+import com.example.qlybandocu.viewModel.OrderDetailModel;
+import com.example.qlybandocu.viewModel.ProductDetailModel;
 import com.example.qlybandocu.models.ProductModel;
 import com.example.qlybandocu.models.UserModel;
 
 
-import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -115,5 +113,19 @@ public interface BanDoCuApi {
     Call<OrderModel> getOrders(
             @Field("iduser") int iduser
     );
+    @FormUrlEncoded
+    @POST("get_order_detail.php")
+    Call<OrderDetailModel> getOrderDetail(
+            @Field("idorder") int idorder
+    );
+
+    @FormUrlEncoded
+    @POST("update_order_status.php")
+    Call<MessageModel> updateOrderStatus(
+            @Field("idorder") int idorder,
+            @Field("status") int status
+    );
+    @POST("get_all_orders.php")
+    Call<OrderModel> getAllOrders();
 
 }

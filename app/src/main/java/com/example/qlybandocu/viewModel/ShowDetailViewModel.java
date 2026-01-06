@@ -3,7 +3,6 @@ package com.example.qlybandocu.viewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.qlybandocu.models.ProductDetailModel;
 import com.example.qlybandocu.repository.ProductDetailRepository;
 
 public class ShowDetailViewModel extends ViewModel {

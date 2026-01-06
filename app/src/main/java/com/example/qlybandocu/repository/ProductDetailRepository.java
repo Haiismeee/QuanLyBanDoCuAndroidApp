@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.qlybandocu.models.ProductDetailModel;
+import com.example.qlybandocu.viewModel.ProductDetailModel;
 import com.example.qlybandocu.retrofit.BanDoCuApi;
 import com.example.qlybandocu.retrofit.RetrofitInstance;
 

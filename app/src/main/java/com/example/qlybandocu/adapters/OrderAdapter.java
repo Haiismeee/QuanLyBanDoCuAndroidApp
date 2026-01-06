@@ -1,5 +1,6 @@
 package com.example.qlybandocu.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qlybandocu.R;
+import com.example.qlybandocu.activities.OrderDetailActivity;
 import com.example.qlybandocu.models.Order;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
@@ -30,12 +33,43 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder h, int i) {
-        Order o = list.get(i);
-        h.tvId.setText("Đơn #" + o.getId());
-        h.tvPrice.setText("Tổng: " + o.getTotal_price() + " đ");
-        h.tvMethod.setText("Thanh toán: " + o.getPayment_method());
-        h.tvStatus.setText("Trạng thái: " + o.getPayment_status());
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        Order order = list.get(position);
+
+        holder.tvId.setText("Đơn #" + order.getId());
+
+        DecimalFormat df = new DecimalFormat("###,###,###");
+        holder.tvPrice.setText("Tổng: " + df.format(order.getTotal_price()) + " đ");
+
+        holder.tvMethod.setText("Thanh toán: " + order.getPayment_method());
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), OrderDetailActivity.class);
+            intent.putExtra("idorder", order.getId());
+            v.getContext().startActivity(intent);
+        });
+
+        // ===== HIỂN THỊ TRẠNG THÁI =====
+        String statusText;
+
+        switch (order.getPayment_status()) {
+            case 1:
+                statusText = "Đã đặt";
+                break;
+            case 2:
+                statusText = "Đang giao";
+                break;
+            case 3:
+                statusText = "Hoàn thành";
+                break;
+            case 4:
+                statusText = "Đã hủy";
+                break;
+            default:
+                statusText = "Không xác định";
+        }
+
+        holder.tvStatus.setText("Trạng thái: " + statusText);
     }
 
     @Override
@@ -44,14 +78,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView tvId, tvPrice, tvMethod, tvStatus;
 
-        public ViewHolder(@NonNull View v) {
-            super(v);
-            tvId = v.findViewById(R.id.tvOrderId);
-            tvPrice = v.findViewById(R.id.tvOrderPrice);
-            tvMethod = v.findViewById(R.id.tvOrderMethod);
-            tvStatus = v.findViewById(R.id.tvOrderStatus);
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvId = itemView.findViewById(R.id.tvOrderId);
+            tvPrice = itemView.findViewById(R.id.tvOrderPrice);
+            tvMethod = itemView.findViewById(R.id.tvOrderMethod);
+            tvStatus = itemView.findViewById(R.id.tvOrderStatus);
         }
     }
 }

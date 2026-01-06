@@ -1,4 +1,6 @@
-package com.example.qlybandocu.models;
+package com.example.qlybandocu.viewModel;
+
+import com.example.qlybandocu.models.ProductDetail;
 
 import java.util.List;
 

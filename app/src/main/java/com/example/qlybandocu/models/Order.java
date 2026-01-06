@@ -13,7 +13,7 @@ public class Order {
     private String payment_method;
 
     @SerializedName("status")
-    private String payment_status;
+    private int status; // ⭐ TRẠNG THÁI ĐƠN
 
     @SerializedName("dateorder")
     private String created_at;
@@ -30,8 +30,8 @@ public class Order {
         return payment_method;
     }
 
-    public String getPayment_status() {
-        return payment_status;
+    public int getPayment_status() {
+        return status;
     }
 
     public String getCreated_at() {

@@ -71,6 +71,10 @@ public class AccountActivity extends AppCompatActivity {
             startActivity(new Intent(
                     AccountActivity.this, OrderHistoryActivity.class));
         });
+        findViewById(R.id.btnDelivery).setOnClickListener(v -> {
+            startActivity(new Intent(this, DeliveryActivity.class));
+        });
+
 
     }
 
