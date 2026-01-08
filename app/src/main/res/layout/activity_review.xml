@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="@dimen/_16sdp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
+
+    <!-- TIÊU ĐỀ -->
+    <TextView
+        android:text="Đánh giá sản phẩm"
+        android:textSize="@dimen/_20ssp"
+        android:textStyle="bold"
+        android:textColor="@color/purple_200"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- KHUNG ĐÁNH GIÁ -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="@dimen/_16sdp"
+        android:background="@drawable/bg_white_radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- RATING -->
+        <TextView
+            android:text="Mức độ hài lòng"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:numStars="5"
+            android:stepSize="1.0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- COMMENT -->
+        <TextView
+            android:text="Nhận xét"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edtComment"
+            android:hint="Nhận xét của bạn"
+            android:minLines="3"
+            android:gravity="top"
+            android:background="@drawable/back_edit"
+            android:padding="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <!-- NÚT GỬI -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSubmitReview"
+        android:text="Gửi đánh giá"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14ssp"
+        android:background="@drawable/back_order"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

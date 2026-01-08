@@ -5,6 +5,7 @@ import com.example.qlybandocu.models.CategoryModel;
 import com.example.qlybandocu.models.MessageModel;
 import com.example.qlybandocu.models.MyPostModel;
 import com.example.qlybandocu.models.OrderModel;
+import com.example.qlybandocu.models.RatingModel;
 import com.example.qlybandocu.viewModel.OrderDetailModel;
 import com.example.qlybandocu.viewModel.ProductDetailModel;
 import com.example.qlybandocu.models.ProductModel;
@@ -127,5 +128,20 @@ public interface BanDoCuApi {
     );
     @POST("get_all_orders.php")
     Call<OrderModel> getAllOrders();
+
+    @FormUrlEncoded
+    @POST("add_review.php")
+    Call<MessageModel> addReview(
+            @Field("iduser") int iduser,
+            @Field("idproduct") int idproduct,
+            @Field("idorder") int idorder,
+            @Field("rating") int rating,
+            @Field("comment") String comment
+    );
+    @FormUrlEncoded
+    @POST("get_avg_rating.php")
+    Call<RatingModel> getAvgRating(
+            @Field("idproduct") int idproduct
+    );
 
 }
