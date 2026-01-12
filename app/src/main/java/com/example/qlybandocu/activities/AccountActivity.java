@@ -150,9 +150,26 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        mAuth.signOut();
-        Toast.makeText(this, "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(AccountActivity.this, LoginActivity.class));
-        finish();
+        new AlertDialog.Builder(AccountActivity.this)
+                .setTitle("Xác nhận đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
+                .setCancelable(false)
+                .setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAuth.signOut();
+                        Toast.makeText(AccountActivity.this, "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(AccountActivity.this, LoginActivity.class));
+                        finish();
+                    }
+                })
+                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
+
 }
