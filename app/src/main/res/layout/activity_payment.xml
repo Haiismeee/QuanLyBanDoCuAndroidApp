@@ -60,6 +60,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chuyển khoản ngân hàng (Mô phỏng)"/>
+
+        <RadioButton
+            android:id="@+id/radioPayOS"
+            android:text="Quét QR ngân hàng (PayOS mô phỏng)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </RadioGroup>
 
     <!-- Button xác nhận -->

@@ -2,10 +2,12 @@ package com.example.qlybandocu.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.qlybandocu.R;
@@ -49,13 +51,22 @@ public class PaymentActivity extends AppCompatActivity {
         tvTotalPrice.setText("Tổng tiền: " + decimalFormat.format(total) + " đ");
         // =====================================================
 
-        findViewById(R.id.btnConfirmPayment)
-                .setOnClickListener(v -> createOrder());
+        findViewById(R.id.btnConfirmPayment).setOnClickListener(v -> {
+
+            String method = getPaymentMethod();
+
+            if (method.equals("PAYOS_QR")) {
+                showPayOSDialog();
+            } else {
+                createOrder(method);
+            }
+        });
+
     }
 
     // ================= CREATE ORDER =================
 
-    private void createOrder() {
+    private void createOrder(String paymentMethod) {
 
         if (Utils.cartList == null || Utils.cartList.size() == 0) {
             Toast.makeText(this,
@@ -76,7 +87,6 @@ public class PaymentActivity extends AppCompatActivity {
         // MOCK THÔNG TIN
         String address = "123 Nguyễn Văn A";
         String phone = "0901234567";
-        String paymentMethod = getPaymentMethod();
 
         double total = 0;
         int quantity = 0;
@@ -163,7 +173,30 @@ public class PaymentActivity extends AppCompatActivity {
     private String getPaymentMethod() {
         int checkedId = radioGroupPayment.getCheckedRadioButtonId();
         if (checkedId == R.id.radioCOD) return "COD";
-        if (checkedId == R.id.radioEwallet) return "Ví điện tử";
-        return "Chuyển khoản";
+        if (checkedId == R.id.radioPayOS) return "PAYOS_QR";
+        return "UNKNOWN";
     }
+
+    private void showPayOSDialog() {
+
+        View view = getLayoutInflater()
+                .inflate(R.layout.dialog_payos_qr, null);
+
+        TextView tvAmount = view.findViewById(R.id.tvAmount);
+        tvAmount.setText("Số tiền: " + tvTotalPrice.getText());
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .setCancelable(false)
+                .create();
+
+        view.findViewById(R.id.btnPaid).setOnClickListener(v -> {
+            dialog.dismiss();
+            createOrder("PAYOS_QR");
+        });
+
+        dialog.show();
+    }
+
+
 }
