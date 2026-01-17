@@ -131,7 +131,7 @@
             <!-- ===== ADD TO CART ===== -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnadd"
-                android:text="Add to cart"
+                android:text="Thêm vào giỏ hàng"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14ssp"

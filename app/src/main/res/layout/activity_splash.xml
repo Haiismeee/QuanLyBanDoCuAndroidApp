@@ -64,7 +64,7 @@
             android:layout_marginStart="@dimen/_25sdp"
             android:layout_marginEnd="@dimen/_25sdp"
             android:id="@+id/tvgetting"
-            android:text="Get started"
+            android:text="Bắt đầu"
             android:textColor="#ff4b3a"
             android:background="@drawable/back_tv"
             android:layout_width="match_parent"
