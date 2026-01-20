@@ -40,7 +40,7 @@ public class PaymentActivity extends AppCompatActivity {
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         radioGroupPayment = findViewById(R.id.radioGroupPayment);
 
-        // ===== TÍNH & HIỂN THỊ TỔNG TIỀN (SỬA LỖI 3.45E7) =====
+        // ===== TÍNH & HIỂN THỊ TỔNG TIỀN =====
         double total = 0;
         for (Cart cart : Utils.cartList) {
             total += cart.getAmount()
@@ -49,19 +49,25 @@ public class PaymentActivity extends AppCompatActivity {
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         tvTotalPrice.setText("Tổng tiền: " + decimalFormat.format(total) + " đ");
-        // =====================================================
+        // ===================================
 
         findViewById(R.id.btnConfirmPayment).setOnClickListener(v -> {
 
             String method = getPaymentMethod();
 
+            if (method.equals("UNKNOWN")) {
+                Toast.makeText(this,
+                        "Vui lòng chọn phương thức thanh toán",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (method.equals("PAYOS_QR")) {
                 showPayOSDialog();
             } else {
-                createOrder(method);
+                createOrder(method); // COD
             }
         });
-
     }
 
     // ================= CREATE ORDER =================
@@ -132,8 +138,7 @@ public class PaymentActivity extends AppCompatActivity {
                             && response.body().isSuccess()) {
 
                         Toast.makeText(PaymentActivity.this,
-                                "Thanh toán thành công (" +
-                                        getPaymentMethod() + ")",
+                                "Thanh toán thành công (" + paymentMethod + ")",
                                 Toast.LENGTH_LONG).show();
 
                         // Clear giỏ hàng
@@ -177,6 +182,8 @@ public class PaymentActivity extends AppCompatActivity {
         return "UNKNOWN";
     }
 
+    // ================= PAYOS MOCK =================
+
     private void showPayOSDialog() {
 
         View view = getLayoutInflater()
@@ -197,6 +204,4 @@ public class PaymentActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
-
 }

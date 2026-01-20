@@ -143,5 +143,13 @@ public interface BanDoCuApi {
     Call<RatingModel> getAvgRating(
             @Field("idproduct") int idproduct
     );
+    @FormUrlEncoded
+    @POST("update_profile.php")
+    Call<MessageModel> updateProfile(
+            @Field("iduser") int iduser,
+            @Field("name") String name,
+            @Field("phone") String phone,
+            @Field("address") String address
+    );
 
 }

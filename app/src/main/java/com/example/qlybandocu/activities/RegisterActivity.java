@@ -1,5 +1,6 @@
 package com.example.qlybandocu.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -8,9 +9,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.qlybandocu.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,7 +51,9 @@ public class RegisterActivity extends AppCompatActivity {
             String pass = edtPassword.getText().toString().trim();
 
             if (name.isEmpty() || email.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,
+                        "Điền đầy đủ thông tin!",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -62,34 +62,58 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(String name, String email, String password) {
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            String uid = user.getUid();
 
-                            // Lưu tên và email vào Firestore
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            Map<String, Object> userMap = new HashMap<>();
-                            userMap.put("name", name);
-                            userMap.put("email", email);
-                            db.collection("users").document(uid).set(userMap);
-
-                            // Gửi email xác thực
-                            user.sendEmailVerification()
-                                    .addOnCompleteListener(verifyTask -> {
-                                        if (verifyTask.isSuccessful()) {
-                                            Toast.makeText(this, "Đăng ký thành công! Vui lòng kiểm tra email để xác thực.", Toast.LENGTH_LONG).show();
-                                            finish(); // Quay về Login
-                                        } else {
-                                            Toast.makeText(this, "Lỗi gửi email xác thực: " + verifyTask.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(this, "Đăng ký thất bại: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(this,
+                                "Đăng ký thất bại: " +
+                                        task.getException().getMessage(),
+                                Toast.LENGTH_LONG).show();
+                        return;
                     }
+
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    if (user == null) return;
+
+                    String uid = user.getUid();
+
+                    // ===== LƯU THÔNG TIN CƠ BẢN =====
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("name", name);
+                    userMap.put("email", email);
+                    userMap.put("profileCompleted", false); // ⭐ QUAN TRỌNG
+
+                    db.collection("users")
+                            .document(uid)
+                            .set(userMap);
+
+                    // ===== GỬI EMAIL XÁC THỰC =====
+                    user.sendEmailVerification()
+                            .addOnCompleteListener(verifyTask -> {
+
+                                if (verifyTask.isSuccessful()) {
+
+                                    Toast.makeText(this,
+                                            "Đăng ký thành công! Vui lòng xác thực email.",
+                                            Toast.LENGTH_LONG).show();
+
+                                    // 👉 CHUYỂN SANG NHẬP THÔNG TIN
+                                    startActivity(new Intent(
+                                            RegisterActivity.this,
+                                            UpdateProfileActivity.class
+                                    ));
+                                    finish();
+
+                                } else {
+                                    Toast.makeText(this,
+                                            "Lỗi gửi email xác thực: " +
+                                                    verifyTask.getException().getMessage(),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
                 });
     }
 }
