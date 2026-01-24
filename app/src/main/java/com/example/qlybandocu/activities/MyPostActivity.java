@@ -14,6 +14,8 @@ import com.example.qlybandocu.models.MyPostModel;
 import com.example.qlybandocu.retrofit.BanDoCuApi;
 import com.example.qlybandocu.retrofit.RetrofitInstance;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,6 +34,8 @@ public class MyPostActivity extends AppCompatActivity {
         // ✅ ÁNH XẠ ĐÚNG ID
         rcv = findViewById(R.id.rcvMyPosts);
         rcv.setLayoutManager(new LinearLayoutManager(this));
+        rcv.setAdapter(new MyPostAdapter(this, new ArrayList<>()));
+
 
         api = RetrofitInstance.getRetrofit().create(BanDoCuApi.class);
 
@@ -39,19 +43,35 @@ public class MyPostActivity extends AppCompatActivity {
     }
 
     private void loadMyPosts() {
+
+        if (Utils.user_current == null) {
+            Toast.makeText(this,
+                    "Vui lòng đăng nhập lại",
+                    Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         int iduser = Utils.user_current.getId();
 
+        // ✅ CHO PHÉP ID = 0 (USER CHƯA MAP MYSQL)
         api.getMyPosts(iduser).enqueue(new Callback<MyPostModel>() {
             @Override
-            public void onResponse(Call<MyPostModel> call, Response<MyPostModel> res) {
-                if (res.body() != null && res.body().isSuccess()) {
+            public void onResponse(Call<MyPostModel> call,
+                                   Response<MyPostModel> res) {
+
+                if (res.body() != null
+                        && res.body().isSuccess()
+                        && res.body().getResult() != null
+                        && res.body().getResult().size() > 0) {
+
                     rcv.setAdapter(new MyPostAdapter(
                             MyPostActivity.this,
                             res.body().getResult()
                     ));
                 } else {
                     Toast.makeText(MyPostActivity.this,
-                            "Chưa có tin nào",
+                            "Bạn chưa đăng tin nào",
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -59,10 +79,12 @@ public class MyPostActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<MyPostModel> call, Throwable t) {
                 Toast.makeText(MyPostActivity.this,
-                        t.getMessage(),
+                        "Lỗi kết nối server",
                         Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+
+
+
 }

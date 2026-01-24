@@ -43,7 +43,7 @@
                     android:id="@+id/tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Buy and Sub"
+                    android:text="Bạn muốn mua/bán gì?"
                     android:textSize="@dimen/_14ssp"
                     android:textStyle="bold"
                     android:layout_marginStart="@dimen/_15sdp"
