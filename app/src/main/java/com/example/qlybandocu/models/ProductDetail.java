@@ -68,4 +68,14 @@ public class ProductDetail {
     public void setPrice(double price) {
         this.price = price;
     }
+    private int status; // 0: đang bán, 1: đã bán
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }
+

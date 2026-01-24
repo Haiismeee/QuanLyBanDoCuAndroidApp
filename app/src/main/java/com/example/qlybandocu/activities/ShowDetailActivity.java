@@ -30,7 +30,6 @@ import com.example.qlybandocu.viewModel.ShowDetailViewModel;
 import com.example.qlybandocu.models.RatingModel;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 import io.paperdb.Paper;
 import retrofit2.Call;
@@ -62,7 +61,6 @@ public class ShowDetailActivity extends AppCompatActivity {
 
         Paper.init(this);
 
-        // ===== ÁNH XẠ ĐÁNH GIÁ =====
         ratingAvg = findViewById(R.id.ratingAvg);
         tvTotalReview = findViewById(R.id.tvTotalReview);
 
@@ -133,7 +131,7 @@ public class ShowDetailActivity extends AppCompatActivity {
             }
         });
 
-        binding.btnadd.setOnClickListener(view -> addToCart(amount));
+        // ⚠️ btnadd sẽ được xử lý sau khi load data (theo status)
     }
 
     // ================= ADD TO CART =================
@@ -208,7 +206,17 @@ public class ShowDetailActivity extends AppCompatActivity {
                                 .load(productDetail.getStrproductthumb())
                                 .into(binding.image);
 
-                        // ===== LOAD ĐÁNH GIÁ TRUNG BÌNH =====
+                        // ===== ẨN NÚT THÊM GIỎ NẾU ĐÃ BÁN =====
+                        if (productDetail.getStatus() == 1) {
+                            binding.btnadd.setVisibility(View.GONE);
+                        } else {
+                            binding.btnadd.setVisibility(View.VISIBLE);
+                            binding.btnadd.setOnClickListener(
+                                    v -> addToCart(amount)
+                            );
+                        }
+
+                        // ===== LOAD ĐÁNH GIÁ =====
                         loadRating(productDetail.getId());
                     }
                 });
