@@ -3,11 +3,13 @@ package com.example.qlybandocu.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.qlybandocu.R;
 import com.example.qlybandocu.models.OrderDetail;
 
@@ -36,17 +38,24 @@ public class OrderDetailAdapter
 
         OrderDetail d = list.get(i);
 
-        h.tvName.setText(d.getName());
-        h.tvQty.setText("Số lượng: " + d.getQuantity());
+        h.tvName.setText(d.getProductName());
+        h.tvQuantity.setText("Số lượng: " + d.getQuantity());
 
         DecimalFormat df = new DecimalFormat("###,###,###");
-        h.tvPrice.setText("Giá: " + df.format(d.getPrice()) + " đ");
+        h.tvPrice.setText(df.format(d.getPrice()) + " đ");
+
+        Glide.with(h.itemView.getContext())
+                .load(d.getProductImage())
+                .into(h.imgProduct);
     }
+
 
     @Override
     public int getItemCount() {
         return list.size();
     }
+
+    // ===== TÍNH TỔNG TIỀN =====
     public int getTotalPrice() {
         int total = 0;
         for (OrderDetail item : list) {
@@ -55,16 +64,17 @@ public class OrderDetailAdapter
         return total;
     }
 
-
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvQty, tvPrice;
+
+        ImageView imgProduct;
+        TextView tvName, tvQuantity, tvPrice;
 
         public ViewHolder(@NonNull View v) {
             super(v);
+            imgProduct = v.findViewById(R.id.imgProduct);
             tvName = v.findViewById(R.id.tvName);
-            tvQty = v.findViewById(R.id.tvQty);
+            tvQuantity = v.findViewById(R.id.tvQuantity);
             tvPrice = v.findViewById(R.id.tvPrice);
         }
     }
-
 }

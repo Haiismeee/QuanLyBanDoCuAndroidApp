@@ -13,9 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qlybandocu.R;
 import com.example.qlybandocu.adapters.OrderDetailAdapter;
+import com.example.qlybandocu.models.OrderDetail;
 import com.example.qlybandocu.retrofit.BanDoCuApi;
 import com.example.qlybandocu.retrofit.RetrofitInstance;
 import com.example.qlybandocu.viewModel.OrderDetailModel;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +46,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
 
         rcv.setLayoutManager(new LinearLayoutManager(this));
+        OrderDetailAdapter adapter = new OrderDetailAdapter(new ArrayList<>());
+        rcv.setAdapter(adapter);
 
         tvOrderId.setText("Mã đơn: #" + idorder);
 
@@ -55,30 +62,45 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         BanDoCuApi api = RetrofitInstance.getRetrofit().create(BanDoCuApi.class);
 
-        api.getOrderDetail(idorder)
-                .enqueue(new Callback<OrderDetailModel>() {
-                    @Override
-                    public void onResponse(Call<OrderDetailModel> call,
-                                           Response<OrderDetailModel> response) {
+        api.getOrderDetail(idorder).enqueue(new Callback<OrderDetailModel>() {
+            @Override
+            public void onResponse(Call<OrderDetailModel> call,
+                                   Response<OrderDetailModel> response) {
 
-                        if (response.body() != null && response.body().isSuccess()) {
-                            OrderDetailAdapter adapter =
-                                    new OrderDetailAdapter(response.body().getResult());
-                            rcv.setAdapter(adapter);
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().isSuccess()) {
 
-                            // 👉 giả sử adapter có hàm tính tổng
-                            tvTotalPrice.setText(adapter.getTotalPrice() + " đ");
-                        }
+                    List<OrderDetail> list = response.body().getResult();
+
+                    if (list != null && !list.isEmpty()) {
+
+                        OrderDetailAdapter adapter =
+                                new OrderDetailAdapter(list);
+                        rcv.setAdapter(adapter);
+
+                        DecimalFormat df = new DecimalFormat("###,###,###");
+                        tvTotalPrice.setText(df.format(adapter.getTotalPrice()) + " đ");
+
+                    } else {
+                        tvTotalPrice.setText("0 đ");
                     }
+                } else {
+                    Toast.makeText(OrderDetailActivity.this,
+                            "Không có dữ liệu đơn hàng",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderDetailModel> call, Throwable t) {
+                Toast.makeText(OrderDetailActivity.this,
+                        "Lỗi API: " + t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
-                    @Override
-                    public void onFailure(Call<OrderDetailModel> call, Throwable t) {
-                        Toast.makeText(OrderDetailActivity.this,
-                                t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                });
     }
 
 }

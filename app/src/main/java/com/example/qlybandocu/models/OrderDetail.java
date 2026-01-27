@@ -7,11 +7,11 @@ public class OrderDetail {
     @SerializedName("idproduct")
     private int idproduct;
 
-    @SerializedName("name")
-    private String name;
+    @SerializedName("productname")
+    private String productName;
 
-    @SerializedName("image")
-    private String image;
+    @SerializedName("product_image")
+    private String productImage;
 
     @SerializedName("quantity")
     private int quantity;
@@ -23,12 +23,12 @@ public class OrderDetail {
         return idproduct;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public String getImage() {
-        return image;
+    public String getProductImage() {
+        return productImage;
     }
 
     public int getQuantity() {
