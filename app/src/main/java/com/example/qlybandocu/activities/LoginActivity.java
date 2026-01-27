@@ -12,6 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.qlybandocu.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.example.qlybandocu.Utils.Utils;
+import com.example.qlybandocu.models.UserModel;
+import com.example.qlybandocu.retrofit.BanDoCuApi;
+import com.example.qlybandocu.retrofit.RetrofitInstance;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -72,27 +81,73 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null && user.isEmailVerified()) {
-                            Toast.makeText(this,
-                                    "Đăng nhập thành công!",
-                                    Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(this, HomeActivity.class));
-                            finish();
-                        } else {
-                            Toast.makeText(this,
-                                    "Vui lòng xác thực email!",
-                                    Toast.LENGTH_LONG).show();
-                            mAuth.signOut();
-                        }
-                    } else {
+
+                    if (!task.isSuccessful()) {
                         Toast.makeText(this,
                                 "Sai email hoặc mật khẩu!",
                                 Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+                    if (firebaseUser == null || !firebaseUser.isEmailVerified()) {
+                        Toast.makeText(this,
+                                "Vui lòng xác thực email!",
+                                Toast.LENGTH_LONG).show();
+                        mAuth.signOut();
+                        return;
+                    }
+
+                    // ✅ FIREBASE OK → LẤY UID
+                    String firebaseUid = firebaseUser.getUid();
+
+                    // ✅ GỌI API MYSQL
+                    BanDoCuApi api = RetrofitInstance
+                            .getRetrofit()
+                            .create(BanDoCuApi.class);
+
+                    api.getUserByFirebase(firebaseUid)
+                            .enqueue(new Callback<UserModel>() {
+                                @Override
+                                public void onResponse(Call<UserModel> call,
+                                                       Response<UserModel> response) {
+
+                                    if (response.body() != null
+                                            && response.body().isSuccess()) {
+
+                                        // ✅ USER MYSQL THẬT
+                                        Utils.user_current =
+                                                response.body().getResult();
+
+                                        Toast.makeText(LoginActivity.this,
+                                                "Đăng nhập thành công!",
+                                                Toast.LENGTH_SHORT).show();
+
+                                        startActivity(new Intent(
+                                                LoginActivity.this,
+                                                HomeActivity.class
+                                        ));
+                                        finish();
+
+                                    } else {
+                                        Toast.makeText(LoginActivity.this,
+                                                "Không tìm thấy thông tin người dùng!",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<UserModel> call, Throwable t) {
+                                    Toast.makeText(LoginActivity.this,
+                                            t.getMessage(),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
                 });
     }
+
 }

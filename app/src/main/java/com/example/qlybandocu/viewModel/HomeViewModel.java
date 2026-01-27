@@ -16,10 +16,18 @@ public class HomeViewModel extends ViewModel {
         categoryRepository = new CategoryRepository();
         productRepository = new ProductRepository();
     }
+
     public MutableLiveData<CategoryModel> categoryModelMutableLiveData(){
         return categoryRepository.getCategory();
     }
+
     public MutableLiveData<ProductModel> productModelMutableLiveData(int idcate){
         return productRepository.getProducts(idcate);
     }
+
+    // 👉 THÊM CÁI NÀY
+    public MutableLiveData<ProductModel> searchProduct(String keyword){
+        return productRepository.searchProduct(keyword);
+    }
 }
+

@@ -23,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.example.qlybandocu.Utils.Utils;
+
 
 public class AccountActivity extends AppCompatActivity {
 
@@ -59,8 +61,13 @@ public class AccountActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
 
         loadUserInfo();
+        btnEditProfile.setOnClickListener(v -> {
+            startActivity(new Intent(
+                    AccountActivity.this,
+                    UpdateProfileActivity.class
+            ));
+        });
 
-        btnEditProfile.setOnClickListener(v -> editProfile());
         btnChangePassword.setOnClickListener(v -> changePassword());
         btnLogout.setOnClickListener(v -> logout());
         btnMyPosts = findViewById(R.id.btnMyPosts);
@@ -79,54 +86,15 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void loadUserInfo() {
-        if (currentUser != null) {
-            String email = currentUser.getEmail();
-            // Lấy tên từ Firestore
-            db.collection("users").document(currentUser.getUid())
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        String name = documentSnapshot.contains("name") ? documentSnapshot.getString("name") : "Người dùng";
-                        tvAccountTitle.setText("Xin chào, " + name + " (" + email + ")");
-                    })
-                    .addOnFailureListener(e -> {
-                        tvAccountTitle.setText("Xin chào, " + email);
-                    });
+        if (Utils.user_current != null) {
+            tvAccountTitle.setText(
+                    "Xin chào, " +
+                            Utils.user_current.getName() +
+                            " (" + Utils.user_current.getEmail() + ")"
+            );
         }
     }
 
-    private void editProfile() {
-        // Hiển thị dialog chỉnh sửa tên
-        EditText edtName = new EditText(this);
-        edtName.setHint("Nhập tên mới");
-        db.collection("users").document(currentUser.getUid())
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    String currentName = documentSnapshot.contains("name") ? documentSnapshot.getString("name") : "";
-                    edtName.setText(currentName);
-                });
-
-        new AlertDialog.Builder(this)
-                .setTitle("Chỉnh sửa thông tin")
-                .setView(edtName)
-                .setPositiveButton("Lưu", (dialog, which) -> {
-                    String newName = edtName.getText().toString().trim();
-                    if (!newName.isEmpty()) {
-                        Map<String, Object> updateMap = new HashMap<>();
-                        updateMap.put("name", newName);
-                        db.collection("users").document(currentUser.getUid())
-                                .update(updateMap)
-                                .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                                    loadUserInfo();
-                                })
-                                .addOnFailureListener(e -> Toast.makeText(this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show());
-                    } else {
-                        Toast.makeText(this, "Tên không được để trống!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
 
     private void changePassword() {
         EditText edtNewPass = new EditText(this);

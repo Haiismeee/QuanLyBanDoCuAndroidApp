@@ -3,34 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-<variable
-    name="tengido"
-    type="com.example.qlybandocu.models.Category" />
+        <variable
+            name="tengido"
+            type="com.example.qlybandocu.models.Category" />
     </data>
+
     <androidx.cardview.widget.CardView
-        android:elevation="@dimen/_8sdp"
-        app:cardCornerRadius="@dimen/_4sdp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="@dimen/_90sdp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_4sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="@dimen/_2sdp"
+        app:cardUseCompatPadding="true">
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_8sdp">
+
+            <!-- ICON CATEGORY -->
             <ImageView
                 android:id="@+id/image_cate"
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="@dimen/_48sdp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_info"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/ic_info"
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="@dimen/_80sdp"/>
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- CATEGORY NAME -->
             <TextView
-                app:layout_constraintTop_toBottomOf="@id/image_cate"
-                app:layout_constraintStart_toStartOf="@+id/image_cate"
+                android:id="@+id/txtCategoryName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:gravity="center"
                 android:text="@{tengido.category}"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:gravity="center"
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="wrap_content"/>
+                android:textSize="@dimen/_11ssp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@id/image_cate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

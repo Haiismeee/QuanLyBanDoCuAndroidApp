@@ -152,4 +152,10 @@ public interface BanDoCuApi {
             @Field("address") String address
     );
 
+    @FormUrlEncoded
+    @POST("get_user_by_firebase.php")
+    Call<UserModel> getUserByFirebase(
+            @Field("firebase_uid") String firebaseUid
+    );
+
 }

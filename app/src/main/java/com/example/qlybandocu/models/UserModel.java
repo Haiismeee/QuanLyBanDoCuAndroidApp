@@ -1,26 +1,20 @@
 package com.example.qlybandocu.models;
 
 public class UserModel {
+
     private boolean success;
     private String message;
-    private User result;
+    private User result;   // ✅ DÙNG models.User
 
-    public boolean isSuccess() { return success; }
-    public String getMessage() { return message; }
-    public User getResult() { return result; }
+    public boolean isSuccess() {
+        return success;
+    }
 
-    public static class User {
-        private int id;
-        private String name;
-        private String email;
-        private String phone;
+    public String getMessage() {
+        return message;
+    }
 
-        public int getId() { return id; }
-        public String getName() { return name; }
-        public String getEmail() { return email; }
-
-        public String getPhone() {
-            return phone;
-        }
+    public User getResult() {
+        return result;
     }
 }

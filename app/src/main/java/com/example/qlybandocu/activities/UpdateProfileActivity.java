@@ -35,8 +35,16 @@ public class UpdateProfileActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSaveProfile);
         btnSkip = findViewById(R.id.btnSkipProfile);
 
+        // ===== HIỂN THỊ THÔNG TIN HIỆN TẠI (NẾU CÓ) =====
+        if (Utils.user_current != null) {
+            edtName.setText(Utils.user_current.getName());
+            edtPhone.setText(Utils.user_current.getPhone());
+            edtAddress.setText(Utils.user_current.getAddress());
+        }
+
         // ===== LƯU THÔNG TIN =====
         btnSave.setOnClickListener(v -> {
+
             String name = edtName.getText().toString().trim();
             String phone = edtPhone.getText().toString().trim();
             String address = edtAddress.getText().toString().trim();
@@ -96,6 +104,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
                 if (response.body() != null
                         && response.body().isSuccess()) {
+
+                    // ✅ CẬP NHẬT LẠI USER TRONG APP (QUAN TRỌNG)
+                    Utils.user_current.setName(name);
+                    Utils.user_current.setPhone(phone);
+                    Utils.user_current.setAddress(address);
 
                     Toast.makeText(UpdateProfileActivity.this,
                             "Cập nhật thông tin thành công",

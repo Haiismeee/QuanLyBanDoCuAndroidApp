@@ -3,13 +3,10 @@ package com.example.qlybandocu.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,6 +21,9 @@ import com.example.qlybandocu.listener.EventClickListener;
 import com.example.qlybandocu.models.Category;
 import com.example.qlybandocu.models.Products;
 import com.example.qlybandocu.viewModel.HomeViewModel;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.qlybandocu.Utils.GridSpacingItemDecoration;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +31,11 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity
         implements CategoryListener, EventClickListener {
 
-    ActivityHomeBinding binding;
-    HomeViewModel homeViewModel;
+    private ActivityHomeBinding binding;
+    private HomeViewModel homeViewModel;
 
-    EditText editsearch;
-
-    PopularAdapter popularAdapter;
-    List<Products> popularList = new ArrayList<>();
+    private PopularAdapter popularAdapter;
+    private final List<Products> productList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,67 +45,57 @@ public class HomeActivity extends AppCompatActivity
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
 
         initView();
+        initAction();
         initData();
         initSearch();
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
-            return insets;
-        });
     }
 
     // ================= VIEW =================
 
     private void initView() {
 
-        // CATEGORY
-        binding.rcCategory.setHasFixedSize(true);
         binding.rcCategory.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                new GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false)
         );
 
-        // POPULAR
-        binding.rcPopular.setHasFixedSize(true);
-        binding.rcPopular.setLayoutManager(new GridLayoutManager(this, 3));
+        int spacing = getResources().getDimensionPixelSize(R.dimen._6sdp);
+        binding.rcCategory.addItemDecoration(
+                new GridSpacingItemDecoration(2, spacing, false)
+        );
 
-        popularAdapter = new PopularAdapter(popularList, this);
+        binding.rcPopular.setLayoutManager(new GridLayoutManager(this, 2));
+        popularAdapter = new PopularAdapter(productList, this);
         binding.rcPopular.setAdapter(popularAdapter);
+    }
 
-        // Cart
+
+    // ================= ACTION =================
+
+    private void initAction() {
+
         binding.floatingbtn.setOnClickListener(v ->
                 startActivity(new Intent(this, CartActivity.class))
         );
 
-        // Account
         binding.imgProfile.setOnClickListener(v ->
                 startActivity(new Intent(this, AccountActivity.class))
         );
 
-        // Đăng tin
-        if (binding.btnThemSp != null) {
-            binding.btnThemSp.setOnClickListener(v ->
-                    startActivity(new Intent(this, DangTinActivity.class))
-            );
-        }
+        binding.btnThemSp.setOnClickListener(v ->
+                startActivity(new Intent(this, DangTinActivity.class))
+        );
 
-        // ===== Bottom menu =====
-
-        // INFO
         binding.btnInfo.setOnClickListener(v ->
                 startActivity(new Intent(this, InfoActivity.class))
         );
 
-        // SUPPORT
         binding.btnSupport.setOnClickListener(v ->
                 startActivity(new Intent(this, SupportActivity.class))
         );
 
-        // SETTINGS
         binding.btnSettings.setOnClickListener(v ->
                 startActivity(new Intent(this, SettingsActivity.class))
         );
-
     }
 
     // ================= DATA =================
@@ -116,54 +104,54 @@ public class HomeActivity extends AppCompatActivity
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-        // CATEGORY
         homeViewModel.categoryModelMutableLiveData()
-                .observe(this, categoryModel -> {
-                    if (categoryModel != null && categoryModel.isSuccess()) {
+                .observe(this, model -> {
+                    if (model != null && model.isSuccess()) {
                         binding.rcCategory.setAdapter(
-                                new CategoryAdapter(categoryModel.getResult(), this)
+                                new CategoryAdapter(model.getResult(), this)
                         );
                     }
                 });
 
-        // POPULAR – LOAD 1 LẦN
+        loadLatestProducts();
+    }
+
+    private void loadLatestProducts() {
         homeViewModel.productModelMutableLiveData(1)
-                .observe(this, productModel -> {
-                    if (productModel != null && productModel.isSuccess()) {
-                        popularList.clear();
-                        popularList.addAll(productModel.getResult());
+                .observe(this, model -> {
+                    if (model != null && model.isSuccess()) {
+                        productList.clear();
+                        productList.addAll(model.getResult());
                         popularAdapter.notifyDataSetChanged();
                     }
                 });
     }
 
-    // ================= SEARCH (LOCAL FILTER) =================
+    // ================= SEARCH (AN TOÀN, KHÔNG LỖI) =================
 
     private void initSearch() {
-        editsearch = findViewById(R.id.editsearch);
-
-        editsearch.setOnEditorActionListener((v, actionId, event) -> {
+        binding.editsearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                String keyword = editsearch.getText().toString()
-                        .trim().toLowerCase();
+                String keyword = binding.editsearch.getText()
+                        .toString()
+                        .trim()
+                        .replaceAll("\\s+", " ");
 
-                List<Products> filtered = new ArrayList<>();
 
                 if (keyword.isEmpty()) {
-                    filtered.addAll(popularList);
-                } else {
-                    for (Products p : popularList) {
-                        if (p.getStrProduct() != null &&
-                                p.getStrProduct().toLowerCase().contains(keyword)) {
-                            filtered.add(p);
-                        }
-                    }
+                    Toast.makeText(this,
+                            "Vui lòng nhập từ khóa tìm kiếm",
+                            Toast.LENGTH_SHORT).show();
+                    return true;
                 }
 
-                binding.rcPopular.setAdapter(
-                        new PopularAdapter(filtered, this)
-                );
+                // 👉 TÁI SỬ DỤNG CategoryActivity Ở CHẾ ĐỘ SEARCH
+                Intent intent = new Intent(this, CategoryActivity.class);
+                intent.putExtra("keyword", keyword);
+                intent.putExtra("isSearch", true);
+                startActivity(intent);
+
                 return true;
             }
             return false;
@@ -185,5 +173,11 @@ public class HomeActivity extends AppCompatActivity
         Intent intent = new Intent(this, ShowDetailActivity.class);
         intent.putExtra("id", products.getIdProduct());
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadLatestProducts();
     }
 }

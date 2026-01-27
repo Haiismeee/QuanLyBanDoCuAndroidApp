@@ -90,9 +90,18 @@ public class PaymentActivity extends AppCompatActivity {
 
         int iduser = Utils.user_current.getId();
 
-        // MOCK THÔNG TIN
-        String address = "123 Nguyễn Văn A";
-        String phone = "0901234567";
+        // ✅ LẤY THÔNG TIN THẬT
+        String address = Utils.user_current.getAddress();
+        String phone   = Utils.user_current.getPhone();
+
+        if (address == null || address.isEmpty()
+                || phone == null || phone.isEmpty()) {
+
+            Toast.makeText(this,
+                    "Vui lòng cập nhật địa chỉ và số điện thoại trước khi thanh toán",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
         double total = 0;
         int quantity = 0;
@@ -141,7 +150,6 @@ public class PaymentActivity extends AppCompatActivity {
                                 "Thanh toán thành công (" + paymentMethod + ")",
                                 Toast.LENGTH_LONG).show();
 
-                        // Clear giỏ hàng
                         Utils.cartList.clear();
 
                         startActivity(new Intent(
@@ -172,6 +180,7 @@ public class PaymentActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
 
     // ================= PAYMENT METHOD =================
 

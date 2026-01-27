@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     RecyclerView rcv;
     Button btnReview;
+    TextView tvOrderId, tvTotalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +33,19 @@ public class OrderDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_detail);
 
         int idorder = getIntent().getIntExtra("idorder", 0);
-        int status  = getIntent().getIntExtra("status", 0); // ⭐ nhận status
+        int status  = getIntent().getIntExtra("status", 0);
 
         rcv = findViewById(R.id.rcvOrderDetail);
         btnReview = findViewById(R.id.btnReview);
+        tvOrderId = findViewById(R.id.tvOrderId);
+        tvTotalPrice = findViewById(R.id.tvTotalPrice);
 
         rcv.setLayoutManager(new LinearLayoutManager(this));
 
-        // ================== CHỈ CHO ĐÁNH GIÁ KHI ĐÃ GIAO ==================
-        if (status == 3) {
-            btnReview.setVisibility(View.VISIBLE);
-        } else {
-            btnReview.setVisibility(View.GONE);
-        }
-        // ==================================================================
+        tvOrderId.setText("Mã đơn: #" + idorder);
+
+        // ===== HIỂN THỊ NÚT ĐÁNH GIÁ =====
+        btnReview.setVisibility(status == 3 ? View.VISIBLE : View.GONE);
 
         btnReview.setOnClickListener(v -> {
             Intent intent = new Intent(this, ReviewActivity.class);
@@ -61,17 +62,23 @@ public class OrderDetailActivity extends AppCompatActivity {
                                            Response<OrderDetailModel> response) {
 
                         if (response.body() != null && response.body().isSuccess()) {
-                            rcv.setAdapter(
-                                    new OrderDetailAdapter(response.body().getResult())
-                            );
+                            OrderDetailAdapter adapter =
+                                    new OrderDetailAdapter(response.body().getResult());
+                            rcv.setAdapter(adapter);
+
+                            // 👉 giả sử adapter có hàm tính tổng
+                            tvTotalPrice.setText(adapter.getTotalPrice() + " đ");
                         }
                     }
+
 
                     @Override
                     public void onFailure(Call<OrderDetailModel> call, Throwable t) {
                         Toast.makeText(OrderDetailActivity.this,
                                 t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+
                 });
     }
+
 }

@@ -47,6 +47,14 @@ public class OrderDetailAdapter
     public int getItemCount() {
         return list.size();
     }
+    public int getTotalPrice() {
+        int total = 0;
+        for (OrderDetail item : list) {
+            total += item.getPrice() * item.getQuantity();
+        }
+        return total;
+    }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvQty, tvPrice;
@@ -58,4 +66,5 @@ public class OrderDetailAdapter
             tvPrice = v.findViewById(R.id.tvPrice);
         }
     }
+
 }

@@ -38,17 +38,48 @@ public class CategoryActivity extends AppCompatActivity implements EventClickLis
     }
 
     private void initData() {
-        int idcate = getIntent().getIntExtra("idcate",1);
-        String namecate = getIntent().getStringExtra("namecate");
+
         viewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
-        viewModel.productModelMutableLiveData(idcate).observe(this,productModel -> {
-            if (productModel.isSuccess()){
-                ProductAdapter adapter = new ProductAdapter(productModel.getResult(), this);
-                binding.rcCategory.setAdapter(adapter);
-                binding.tvname.setText(namecate + ":"+ productModel.getResult().size());
-            }
-        });
+
+        // 🔑 Phân biệt SEARCH hay CATEGORY
+        boolean isSearch = getIntent().getBooleanExtra("isSearch", false);
+
+        if (isSearch) {
+            // ===== LUỒNG SEARCH =====
+            String keyword = getIntent().getStringExtra("keyword");
+
+            viewModel.searchProduct(keyword).observe(this, productModel -> {
+                if (productModel != null && productModel.isSuccess()) {
+                    ProductAdapter adapter =
+                            new ProductAdapter(productModel.getResult(), this);
+                    binding.rcCategory.setAdapter(adapter);
+
+                    binding.tvname.setText(
+                            "Kết quả tìm kiếm: " + productModel.getResult().size()
+                    );
+                }
+            });
+
+        } else {
+            // ===== LUỒNG CATEGORY (CŨ) =====
+            int idcate = getIntent().getIntExtra("idcate", 1);
+            String namecate = getIntent().getStringExtra("namecate");
+
+            viewModel.productModelMutableLiveData(idcate)
+                    .observe(this, productModel -> {
+                        if (productModel != null && productModel.isSuccess()) {
+                            ProductAdapter adapter =
+                                    new ProductAdapter(productModel.getResult(), this);
+                            binding.rcCategory.setAdapter(adapter);
+
+                            binding.tvname.setText(
+                                    namecate + ": " + productModel.getResult().size()
+                            );
+                        }
+                    });
+        }
     }
+
 
     private void initView() {
         binding.rcCategory.setHasFixedSize(true);
