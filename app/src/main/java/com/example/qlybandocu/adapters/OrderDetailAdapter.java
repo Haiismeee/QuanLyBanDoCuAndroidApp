@@ -44,30 +44,32 @@ public class OrderDetailAdapter
         DecimalFormat df = new DecimalFormat("###,###,###");
         h.tvPrice.setText(df.format(d.getPrice()) + " đ");
 
+        h.tvSellerName.setText("Người bán: " + d.getSellerName());
+        h.tvSellerPhone.setText("SĐT: " + d.getSellerPhone());
+
         Glide.with(h.itemView.getContext())
                 .load(d.getProductImage())
                 .into(h.imgProduct);
     }
 
-
     @Override
     public int getItemCount() {
         return list.size();
     }
-
-    // ===== TÍNH TỔNG TIỀN =====
-    public int getTotalPrice() {
-        int total = 0;
+    public double getTotalPrice() {
+        double total = 0;
         for (OrderDetail item : list) {
             total += item.getPrice() * item.getQuantity();
         }
         return total;
     }
 
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgProduct;
         TextView tvName, tvQuantity, tvPrice;
+        TextView tvSellerName, tvSellerPhone;
 
         public ViewHolder(@NonNull View v) {
             super(v);
@@ -75,6 +77,10 @@ public class OrderDetailAdapter
             tvName = v.findViewById(R.id.tvName);
             tvQuantity = v.findViewById(R.id.tvQuantity);
             tvPrice = v.findViewById(R.id.tvPrice);
+
+            tvSellerName = v.findViewById(R.id.tvSellerName);
+            tvSellerPhone = v.findViewById(R.id.tvSellerPhone);
         }
     }
 }
+

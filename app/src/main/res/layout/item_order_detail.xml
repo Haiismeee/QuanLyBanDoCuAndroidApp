@@ -47,6 +47,24 @@
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tvSellerName"
+                android:text="Người bán:"
+                android:textSize="12sp"
+                android:textColor="#666"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <TextView
+                android:id="@+id/tvSellerPhone"
+                android:text="SĐT:"
+                android:textSize="12sp"
+                android:textColor="#666"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
         </LinearLayout>
 
     </LinearLayout>

@@ -18,6 +18,40 @@ public class OrderDetail {
 
     @SerializedName("price")
     private double price;
+    @SerializedName("buyer_name")
+    private String buyerName;
+
+    @SerializedName("buyer_phone")
+    private String buyerPhone;
+
+    @SerializedName("buyer_address")
+    private String buyerAddress;
+    @SerializedName("seller_name")
+    private String sellerName;
+
+    @SerializedName("seller_phone")
+    private String sellerPhone;
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public String getSellerPhone() {
+        return sellerPhone;
+    }
+
+    public String getBuyerName() {
+        return buyerName;
+    }
+
+    public String getBuyerPhone() {
+        return buyerPhone;
+    }
+
+    public String getBuyerAddress() {
+        return buyerAddress;
+    }
+
 
     public int getIdproduct() {
         return idproduct;

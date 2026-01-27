@@ -31,6 +31,8 @@ public class OrderDetailActivity extends AppCompatActivity {
     RecyclerView rcv;
     Button btnReview;
     TextView tvOrderId, tvTotalPrice;
+    TextView tvBuyerName, tvBuyerPhone, tvBuyerAddress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,10 @@ public class OrderDetailActivity extends AppCompatActivity {
         btnReview = findViewById(R.id.btnReview);
         tvOrderId = findViewById(R.id.tvOrderId);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
+        tvBuyerName = findViewById(R.id.tvBuyerName);
+        tvBuyerPhone = findViewById(R.id.tvBuyerPhone);
+        tvBuyerAddress = findViewById(R.id.tvBuyerAddress);
+
 
         rcv.setLayoutManager(new LinearLayoutManager(this));
         OrderDetailAdapter adapter = new OrderDetailAdapter(new ArrayList<>());
@@ -75,14 +81,24 @@ public class OrderDetailActivity extends AppCompatActivity {
 
                     if (list != null && !list.isEmpty()) {
 
+                        // ===== SET ADAPTER =====
                         OrderDetailAdapter adapter =
                                 new OrderDetailAdapter(list);
                         rcv.setAdapter(adapter);
 
+                        // ===== TỔNG TIỀN =====
                         DecimalFormat df = new DecimalFormat("###,###,###");
                         tvTotalPrice.setText(df.format(adapter.getTotalPrice()) + " đ");
 
-                    } else {
+                        // ===== THÔNG TIN NGƯỜI MUA =====
+                        OrderDetail first = list.get(0);
+
+                        tvBuyerName.setText("Tên: " + first.getBuyerName());
+                        tvBuyerPhone.setText("SĐT: " + first.getBuyerPhone());
+                        tvBuyerAddress.setText("Địa chỉ: " + first.getBuyerAddress());
+
+                    }
+                    else {
                         tvTotalPrice.setText("0 đ");
                     }
                 } else {
