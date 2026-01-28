@@ -19,7 +19,8 @@ import java.util.List;
 public class OrderDetailAdapter
         extends RecyclerView.Adapter<OrderDetailAdapter.ViewHolder> {
 
-    List<OrderDetail> list;
+    private final List<OrderDetail> list;
+    private final DecimalFormat df = new DecimalFormat("###,###,###");
 
     public OrderDetailAdapter(List<OrderDetail> list) {
         this.list = list;
@@ -27,25 +28,38 @@ public class OrderDetailAdapter
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(
+            @NonNull ViewGroup parent,
+            int viewType
+    ) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_order_detail, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder h, int i) {
-
-        OrderDetail d = list.get(i);
+    public void onBindViewHolder(
+            @NonNull ViewHolder h,
+            int position
+    ) {
+        OrderDetail d = list.get(position);
 
         h.tvName.setText(d.getProductName());
         h.tvQuantity.setText("Số lượng: " + d.getQuantity());
-
-        DecimalFormat df = new DecimalFormat("###,###,###");
         h.tvPrice.setText(df.format(d.getPrice()) + " đ");
 
-        h.tvSellerName.setText("Người bán: " + d.getSellerName());
-        h.tvSellerPhone.setText("SĐT: " + d.getSellerPhone());
+        // ===== NGƯỜI BÁN (AN TOÀN NULL) =====
+        if (d.getSellerName() != null) {
+            h.tvSellerName.setText("Người bán: " + d.getSellerName());
+        } else {
+            h.tvSellerName.setText("Người bán: ---");
+        }
+
+        if (d.getSellerPhone() != null) {
+            h.tvSellerPhone.setText("SĐT: " + d.getSellerPhone());
+        } else {
+            h.tvSellerPhone.setText("SĐT: ---");
+        }
 
         Glide.with(h.itemView.getContext())
                 .load(d.getProductImage())
@@ -54,8 +68,10 @@ public class OrderDetailAdapter
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list == null ? 0 : list.size();
     }
+
+    // ===== TÍNH TỔNG TIỀN (ĐÚNG KIỂU) =====
     public double getTotalPrice() {
         double total = 0;
         for (OrderDetail item : list) {
@@ -63,7 +79,6 @@ public class OrderDetailAdapter
         }
         return total;
     }
-
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -77,10 +92,8 @@ public class OrderDetailAdapter
             tvName = v.findViewById(R.id.tvName);
             tvQuantity = v.findViewById(R.id.tvQuantity);
             tvPrice = v.findViewById(R.id.tvPrice);
-
             tvSellerName = v.findViewById(R.id.tvSellerName);
             tvSellerPhone = v.findViewById(R.id.tvSellerPhone);
         }
     }
 }
-

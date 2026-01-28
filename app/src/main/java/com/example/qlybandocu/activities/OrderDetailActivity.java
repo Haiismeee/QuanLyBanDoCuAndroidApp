@@ -2,6 +2,7 @@ package com.example.qlybandocu.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,9 +20,9 @@ import com.example.qlybandocu.retrofit.RetrofitInstance;
 import com.example.qlybandocu.viewModel.OrderDetailModel;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,8 +32,6 @@ public class OrderDetailActivity extends AppCompatActivity {
     RecyclerView rcv;
     Button btnReview;
     TextView tvOrderId, tvTotalPrice;
-    TextView tvBuyerName, tvBuyerPhone, tvBuyerAddress;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +45,10 @@ public class OrderDetailActivity extends AppCompatActivity {
         btnReview = findViewById(R.id.btnReview);
         tvOrderId = findViewById(R.id.tvOrderId);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
-        tvBuyerName = findViewById(R.id.tvBuyerName);
-        tvBuyerPhone = findViewById(R.id.tvBuyerPhone);
-        tvBuyerAddress = findViewById(R.id.tvBuyerAddress);
-
 
         rcv.setLayoutManager(new LinearLayoutManager(this));
-        OrderDetailAdapter adapter = new OrderDetailAdapter(new ArrayList<>());
-        rcv.setAdapter(adapter);
 
         tvOrderId.setText("Mã đơn: #" + idorder);
-
-        // ===== HIỂN THỊ NÚT ĐÁNH GIÁ =====
         btnReview.setVisibility(status == 3 ? View.VISIBLE : View.GONE);
 
         btnReview.setOnClickListener(v -> {
@@ -81,24 +72,16 @@ public class OrderDetailActivity extends AppCompatActivity {
 
                     if (list != null && !list.isEmpty()) {
 
-                        // ===== SET ADAPTER =====
                         OrderDetailAdapter adapter =
                                 new OrderDetailAdapter(list);
                         rcv.setAdapter(adapter);
 
-                        // ===== TỔNG TIỀN =====
                         DecimalFormat df = new DecimalFormat("###,###,###");
-                        tvTotalPrice.setText(df.format(adapter.getTotalPrice()) + " đ");
+                        tvTotalPrice.setText(
+                                df.format(adapter.getTotalPrice()) + " đ"
+                        );
 
-                        // ===== THÔNG TIN NGƯỜI MUA =====
-                        OrderDetail first = list.get(0);
-
-                        tvBuyerName.setText("Tên: " + first.getBuyerName());
-                        tvBuyerPhone.setText("SĐT: " + first.getBuyerPhone());
-                        tvBuyerAddress.setText("Địa chỉ: " + first.getBuyerAddress());
-
-                    }
-                    else {
+                    } else {
                         tvTotalPrice.setText("0 đ");
                     }
                 } else {
@@ -115,8 +98,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
-
 }
+
