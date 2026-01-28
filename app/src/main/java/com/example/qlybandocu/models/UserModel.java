@@ -4,7 +4,7 @@ public class UserModel {
 
     private boolean success;
     private String message;
-    private User result;   // ✅ DÙNG models.User
+    private User result;
 
     public boolean isSuccess() {
         return success;

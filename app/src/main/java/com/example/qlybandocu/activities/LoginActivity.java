@@ -102,14 +102,17 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
 
-                    // ✅ FIREBASE OK → LẤY UID
                     String firebaseUid = firebaseUser.getUid();
+                    String name = firebaseUser.getDisplayName() != null
+                            ? firebaseUser.getDisplayName()
+                            : "Người dùng";
+                    String userEmail = firebaseUser.getEmail();
 
-                    // ✅ GỌI API MYSQL
                     BanDoCuApi api = RetrofitInstance
                             .getRetrofit()
                             .create(BanDoCuApi.class);
 
+                    // 🔹 1. THỬ LẤY USER MYSQL
                     api.getUserByFirebase(firebaseUid)
                             .enqueue(new Callback<UserModel>() {
                                 @Override
@@ -119,35 +122,76 @@ public class LoginActivity extends AppCompatActivity {
                                     if (response.body() != null
                                             && response.body().isSuccess()) {
 
-                                        // ✅ USER MYSQL THẬT
-                                        Utils.user_current =
-                                                response.body().getResult();
-
-                                        Toast.makeText(LoginActivity.this,
-                                                "Đăng nhập thành công!",
-                                                Toast.LENGTH_SHORT).show();
-
-                                        startActivity(new Intent(
-                                                LoginActivity.this,
-                                                HomeActivity.class
-                                        ));
-                                        finish();
-
+                                        Utils.user_current = response.body().getResult();
+                                        goHome();
                                     } else {
-                                        Toast.makeText(LoginActivity.this,
-                                                "Không tìm thấy thông tin người dùng!",
-                                                Toast.LENGTH_LONG).show();
+                                        // 🔹 2. CHƯA CÓ → SYNC USER
+                                        syncUser(api, firebaseUid, userEmail, name);
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<UserModel> call, Throwable t) {
                                     Toast.makeText(LoginActivity.this,
-                                            t.getMessage(),
+                                            "Lỗi server: " + t.getMessage(),
                                             Toast.LENGTH_LONG).show();
                                 }
                             });
                 });
     }
+
+    private void syncUser(BanDoCuApi api,
+                          String firebaseUid,
+                          String email,
+                          String name) {
+
+        api.syncUser(firebaseUid, email, name)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this,
+                                    "HTTP error: " + response.code(),
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (response.body() == null) {
+                            Toast.makeText(LoginActivity.this,
+                                    "Response body null",
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (response.body().isSuccess()) {
+                            Utils.user_current = response.body().getResult();
+
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this,
+                                    response.body().getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        Toast.makeText(LoginActivity.this,
+                                "Lỗi sync user: " + t.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void goHome() {
+        Toast.makeText(this,
+                "Đăng nhập thành công!",
+                Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
+    }
+
 
 }
