@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qlybandocu.R;
+import com.example.qlybandocu.Utils.AuthGuard;
 import com.example.qlybandocu.Utils.Utils;
 import com.example.qlybandocu.adapters.CartAdapter;
 import com.example.qlybandocu.databinding.ActivityCartBinding;
@@ -50,22 +51,25 @@ public class CartActivity extends AppCompatActivity {
     private void initControl() {
         binding.btncheckout.setOnClickListener(view -> {
 
+            // 🔒 CHẶN KHÁCH
+            if (!AuthGuard.requireLogin(this)) return;
+
+            // ✅ ĐÃ LOGIN → xử lý tiếp
             if (Utils.cartList == null || Utils.cartList.isEmpty()) {
                 Toast.makeText(this, "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Tính tổng tiền
             double total = 0;
             for (Cart cart : Utils.cartList) {
                 total += cart.getAmount() * cart.getProductDetail().getPrice();
             }
 
-            // Sang PaymentActivity
             Intent intent = new Intent(CartActivity.this, PaymentActivity.class);
-            intent.putExtra("total_price", (int) total); // mock int cho gọn
+            intent.putExtra("total_price", (int) total);
             startActivity(intent);
         });
+
     }
 
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.qlybandocu.R;
+import com.example.qlybandocu.Utils.AuthGuard;
 import com.example.qlybandocu.adapters.CategoryAdapter;
 import com.example.qlybandocu.adapters.PopularAdapter;
 import com.example.qlybandocu.databinding.ActivityHomeBinding;
@@ -77,9 +78,11 @@ public class HomeActivity extends AppCompatActivity
                 startActivity(new Intent(this, CartActivity.class))
         );
 
-        binding.imgProfile.setOnClickListener(v ->
-                startActivity(new Intent(this, AccountActivity.class))
-        );
+        binding.imgProfile.setOnClickListener(v ->{
+                if (!AuthGuard.requireLogin(this)) return;
+
+                startActivity(new Intent(this, AccountActivity.class));
+        });
 
         binding.btnThemSp.setOnClickListener(v ->
                 startActivity(new Intent(this, DangTinActivity.class))

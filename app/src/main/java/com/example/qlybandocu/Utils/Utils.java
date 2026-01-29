@@ -10,5 +10,6 @@ import java.util.List;
 public class Utils {
     public static List<Cart> cartList = new ArrayList<>();
     public static final String BASE_URL = "http://192.168.1.6/banhang/";
-    public static User user_current;
+    public static User user_current = null;
+    public static boolean isGuest = false;
 }

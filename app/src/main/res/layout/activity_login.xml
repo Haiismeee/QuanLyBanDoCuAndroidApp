@@ -65,13 +65,13 @@
             android:layout_marginBottom="8dp"/>
 
         <Button
-            android:id="@+id/btnGoogle"
-            android:text="Đăng nhập với Google"
+            android:id="@+id/btnGuest"
+            android:text="Tiếp tục với tư cách khách"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#ffffff"
-            android:textColor="#000000"
-            android:layout_marginBottom="12dp"/>
+            android:backgroundTint="#ff4b3a"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/tvForgotPassword"

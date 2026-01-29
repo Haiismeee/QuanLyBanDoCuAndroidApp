@@ -41,7 +41,7 @@
                             android:id="@+id/tvhi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Hi Nam Hai"
+                            android:text="Xin chào"
                             android:textStyle="bold"
                             android:textSize="@dimen/_14ssp"
                             android:textColor="@color/purple_200" />

@@ -42,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         txtToRegister = findViewById(R.id.txtToRegister);
         txtForgotPassword = findViewById(R.id.tvForgotPassword);
+        TextView txtGuest = findViewById(R.id.btnGuest);
+
+        txtGuest.setOnClickListener(v -> loginAsGuest());
 
         txtToRegister.setOnClickListener(v ->
                 startActivity(new Intent(this, RegisterActivity.class)));
@@ -139,6 +142,32 @@ public class LoginActivity extends AppCompatActivity {
                             });
                 });
     }
+    private void loginAsGuest() {
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(this,
+                                "Không thể đăng nhập khách",
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    FirebaseUser user = mAuth.getCurrentUser();
+
+                    // ⚠️ QUAN TRỌNG
+                    // Guest KHÔNG có user trong MySQL
+                    Utils.user_current = null;
+                    Utils.isGuest = true; // <-- bạn thêm biến này
+
+                    Toast.makeText(this,
+                            "Đang dùng với tư cách khách",
+                            Toast.LENGTH_SHORT).show();
+
+                    startActivity(new Intent(this, HomeActivity.class));
+                    finish();
+                });
+    }
+
 
     private void syncUser(BanDoCuApi api,
                           String firebaseUid,

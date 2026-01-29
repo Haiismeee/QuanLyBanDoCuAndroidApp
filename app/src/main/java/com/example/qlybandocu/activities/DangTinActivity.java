@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.qlybandocu.Utils.AuthGuard;
 import com.example.qlybandocu.Utils.Utils;
 import com.example.qlybandocu.databinding.ActivityDangTinBinding;
 import com.example.qlybandocu.models.Category;
@@ -104,7 +105,11 @@ public class DangTinActivity extends AppCompatActivity {
                         .start()
         );
 
-        binding.btnDangTin.setOnClickListener(v -> uploadImage());
+        binding.btnDangTin.setOnClickListener(v ->{
+
+            if (!AuthGuard.requireLogin(this)) return;
+                uploadImage();
+        });
     }
 
     @Override
