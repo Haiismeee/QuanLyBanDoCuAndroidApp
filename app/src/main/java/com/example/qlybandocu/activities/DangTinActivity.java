@@ -1,5 +1,6 @@
 package com.example.qlybandocu.activities;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -96,6 +97,7 @@ public class DangTinActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private void initAction() {
 
         binding.imgCamera.setOnClickListener(v ->

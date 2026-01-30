@@ -32,6 +32,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     RecyclerView rcv;
     Button btnReview;
     TextView tvOrderId, tvTotalPrice;
+    TextView tvBuyerName, tvBuyerPhone, tvBuyerAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,9 @@ public class OrderDetailActivity extends AppCompatActivity {
         btnReview = findViewById(R.id.btnReview);
         tvOrderId = findViewById(R.id.tvOrderId);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
+        tvBuyerName = findViewById(R.id.tvBuyerName);
+        tvBuyerPhone = findViewById(R.id.tvBuyerPhone);
+        tvBuyerAddress = findViewById(R.id.tvBuyerAddress);
 
         rcv.setLayoutManager(new LinearLayoutManager(this));
 
