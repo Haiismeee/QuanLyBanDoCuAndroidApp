@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:text="My Cart"
+                    android:text="Giỏ hàng của bạn"
                     android:textSize="@dimen/_18sdp"
                     android:textColor="@color/purple_200"
                     android:textAlignment="center"
@@ -84,7 +84,7 @@
                     android:background="@drawable/back_order"
                     android:layout_marginEnd="@dimen/_25sdp"
                     android:layout_marginStart="@dimen/_25sdp"
-                    android:text="Checkout"
+                    android:text="Thanh toán"
                     android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

@@ -74,9 +74,11 @@ public class HomeActivity extends AppCompatActivity
 
     private void initAction() {
 
-        binding.floatingbtn.setOnClickListener(v ->
-                startActivity(new Intent(this, CartActivity.class))
-        );
+        binding.floatingbtn.setOnClickListener(v ->{
+            if (!AuthGuard.requireLogin(this)) return;
+
+            startActivity(new Intent(this, CartActivity.class));
+        });
 
         binding.imgProfile.setOnClickListener(v ->{
                 if (!AuthGuard.requireLogin(this)) return;

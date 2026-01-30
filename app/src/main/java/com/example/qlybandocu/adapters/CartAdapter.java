@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,9 +87,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     }
 
     private void addToCart(int adapterPosition) {
-        Utils.cartList.get(adapterPosition).setAmount(Utils.cartList.get(adapterPosition).getAmount() + 1);
+
+        Cart cart = Utils.cartList.get(adapterPosition);
+
+        // 🚫 CHỈ CHO PHÉP 1 SẢN PHẨM (ĐỒ CŨ)
+        if (cart.getAmount() >= 1) {
+            Toast.makeText(context,
+                    "Sản phẩm này chỉ còn 1 cái",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // (Trường hợp này thực tế sẽ không xảy ra nữa)
+        cart.setAmount(cart.getAmount() + 1);
         Paper.book().write("cart", Utils.cartList);
     }
+
 
     @Override
     public int getItemCount() {

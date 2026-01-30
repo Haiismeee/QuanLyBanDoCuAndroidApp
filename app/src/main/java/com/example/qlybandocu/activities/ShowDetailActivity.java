@@ -114,11 +114,22 @@ public class ShowDetailActivity extends AppCompatActivity {
     private void eventClick() {
 
         binding.imageadd.setOnClickListener(view -> {
-            amount = Integer.parseInt(
-                    binding.txtamount.getText().toString()
-            ) + 1;
+
+            int current = Integer.parseInt(binding.txtamount.getText().toString());
+
+            if (current >= 1) {
+                Toast.makeText(
+                        this,
+                        "Sản phẩm đồ cũ chỉ còn 1 chiếc",
+                        Toast.LENGTH_SHORT
+                ).show();
+                return;
+            }
+
+            amount = current + 1;
             binding.txtamount.setText(String.valueOf(amount));
         });
+
 
         binding.imagesub.setOnClickListener(view -> {
             if (Integer.parseInt(

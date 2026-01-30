@@ -134,6 +134,7 @@
                     android:id="@+id/imageadd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/_3ssp"
                     android:src="@drawable/add" />
             </LinearLayout>
 
